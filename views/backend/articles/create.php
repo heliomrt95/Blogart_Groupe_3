@@ -1,10 +1,8 @@
 <?php
 include '../../../header.php';
 
-// Charger toutes les thématiques pour le select
+// Charger toutes les thématiques pour la listbox
 $thematiques = sql_select("THEMATIQUE", "*");
-// Charger tous les mots-clés disponibles
-$motscles = sql_select("MOTCLE", "*");
 ?>
 
 <!-- Bootstrap form to create a new article -->
@@ -17,60 +15,74 @@ $motscles = sql_select("MOTCLE", "*");
             <!-- Form to create a new article -->
             <form action="<?php echo ROOT_URL . '/api/articles/create.php' ?>" method="post" enctype="multipart/form-data">
                 
-                <div class="form-group">
-                    <label for="libTitrArt">Titre de l'article *</label>
-                    <input id="libTitrArt" name="libTitrArt" class="form-control" type="text" required />
+                <!-- Titre -->
+                <div class="form-group mb-3">
+                    <label for="libTitrArt">Titre de l'article <span class="text-danger">*</span></label>
+                    <input id="libTitrArt" name="libTitrArt" class="form-control" type="text" maxlength="100" autofocus="autofocus" required />
+                    <small class="form-text text-muted">Maximum 100 caractères</small>
                 </div>
 
-                <div class="form-group">
-                    <label for="libChapoArt">Chapeau (résumé) *</label>
-                    <textarea id="libChapoArt" name="libChapoArt" class="form-control" rows="3" required></textarea>
+                <!-- Chapeau -->
+                <div class="form-group mb-3">
+                    <label for="libChapoArt">Chapeau <span class="text-danger">*</span></label>
+                    <textarea id="libChapoArt" name="libChapoArt" class="form-control" rows="4" maxlength="500" required></textarea>
+                    <small class="form-text text-muted">Maximum 500 caractères</small>
                 </div>
 
-                <div class="form-group">
-                    <label for="libAccrochArt">Accroche paragraphe 1</label>
-                    <input id="libAccrochArt" name="libAccrochArt" class="form-control" type="text" />
+                <!-- Accroche -->
+                <div class="form-group mb-3">
+                    <label for="libAccrochArt">Accroche <span class="text-danger">*</span></label>
+                    <input id="libAccrochArt" name="libAccrochArt" class="form-control" type="text" maxlength="100" required />
+                    <small class="form-text text-muted">Maximum 100 caractères</small>
                 </div>
 
-                <div class="form-group">
-                    <label for="parag1Art">Paragraphe 1</label>
-                    <textarea id="parag1Art" name="parag1Art" class="form-control" rows="4"></textarea>
+                <!-- Paragraphe 1 -->
+                <div class="form-group mb-3">
+                    <label for="parag1Art">Paragraphe 1 <span class="text-danger">*</span></label>
+                    <textarea id="parag1Art" name="parag1Art" class="form-control" rows="6" maxlength="1200" required></textarea>
+                    <small class="form-text text-muted">Maximum 1200 caractères</small>
                 </div>
 
-                <div class="form-group">
-                    <label for="libSsTitr1Art">Titre sous-titre 1</label>
-                    <input id="libSsTitr1Art" name="libSsTitr1Art" class="form-control" type="text" />
+                <!-- Sous-titre 1 -->
+                <div class="form-group mb-3">
+                    <label for="libSsTitr1Art">Sous-titre 1 <span class="text-danger">*</span></label>
+                    <input id="libSsTitr1Art" name="libSsTitr1Art" class="form-control" type="text" maxlength="100" required />
+                    <small class="form-text text-muted">Maximum 100 caractères</small>
                 </div>
 
-                <div class="form-group">
-                    <label for="parag2Art">Paragraphe 2</label>
-                    <textarea id="parag2Art" name="parag2Art" class="form-control" rows="4"></textarea>
+                <!-- Paragraphe 2 -->
+                <div class="form-group mb-3">
+                    <label for="parag2Art">Paragraphe 2 <span class="text-danger">*</span></label>
+                    <textarea id="parag2Art" name="parag2Art" class="form-control" rows="6" maxlength="1200" required></textarea>
+                    <small class="form-text text-muted">Maximum 1200 caractères</small>
                 </div>
 
-                <div class="form-group">
-                    <label for="libSsTitr2Art">Titre sous-titre 2</label>
-                    <input id="libSsTitr2Art" name="libSsTitr2Art" class="form-control" type="text" />
+                <!-- Sous-titre 2 -->
+                <div class="form-group mb-3">
+                    <label for="libSsTitr2Art">Sous-titre 2 <span class="text-danger">*</span></label>
+                    <input id="libSsTitr2Art" name="libSsTitr2Art" class="form-control" type="text" maxlength="100" required />
+                    <small class="form-text text-muted">Maximum 100 caractères</small>
                 </div>
 
-                <div class="form-group">
-                    <label for="parag3Art">Paragraphe 3</label>
-                    <textarea id="parag3Art" name="parag3Art" class="form-control" rows="4"></textarea>
+                <!-- Paragraphe 3 -->
+                <div class="form-group mb-3">
+                    <label for="parag3Art">Paragraphe 3 <span class="text-danger">*</span></label>
+                    <textarea id="parag3Art" name="parag3Art" class="form-control" rows="6" maxlength="1200" required></textarea>
+                    <small class="form-text text-muted">Maximum 1200 caractères</small>
                 </div>
 
-                <div class="form-group">
-                    <label for="libConclArt">Conclusion</label>
-                    <textarea id="libConclArt" name="libConclArt" class="form-control" rows="3"></textarea>
+                <!-- Conclusion -->
+                <div class="form-group mb-3">
+                    <label for="libConclArt">Conclusion <span class="text-danger">*</span></label>
+                    <textarea id="libConclArt" name="libConclArt" class="form-control" rows="4" maxlength="800" required></textarea>
+                    <small class="form-text text-muted">Maximum 800 caractères</small>
                 </div>
 
-                <div class="form-group">
-                    <label for="urlPhotArt">Photo de l'article</label>
-                    <input id="urlPhotArt" name="urlPhotArt" class="form-control" type="file" accept="image/*" />
-                </div>
-
-                <div class="form-group">
-                    <label for="numThem">Thématique *</label>
+                <!-- Thématique (Listbox) -->
+                <div class="form-group mb-3">
+                    <label for="numThem">Thématique <span class="text-danger">*</span></label>
                     <select id="numThem" name="numThem" class="form-control" required>
-                        <option value="">-- Sélectionner une thématique --</option>
+                        <option value="">-- Choisissez une thématique --</option>
                         <?php foreach($thematiques as $thematique){ ?>
                             <option value="<?php echo($thematique['numThem']); ?>">
                                 <?php echo($thematique['libThem']); ?>
@@ -79,103 +91,23 @@ $motscles = sql_select("MOTCLE", "*");
                     </select>
                 </div>
 
-                <!-- Gestion des mots-clés -->
-                <div class="form-group">
-                    <label>Choisissez les mots clés liés à l'article :</label>
-                    <div class="row">
-                        <!-- Colonne gauche : Liste des mots-clés disponibles -->
-                        <div class="col-md-4">
-                            <label for="motscles_disponibles"><strong>Liste Mots clés</strong></label>
-                            <select id="motscles_disponibles" class="form-control" style="height: 200px;" multiple size="10">
-                                <option disabled>-- Choisissez un mot clé --</option>
-                                <?php foreach($motscles as $motcle){ ?>
-                                    <option value="<?php echo($motcle['numMotCle']); ?>">
-                                        <?php echo($motcle['libMotCle']); ?>
-                                    </option>
-                                <?php } ?>
-                            </select>
-                        </div>
-
-                        <!-- Colonne centre : Boutons de déplacement -->
-                        <div class="col-md-4 d-flex flex-column justify-content-center">
-                            <button type="button" class="btn btn-secondary mb-2" onclick="ajouterMotCle()">
-                                Ajoutez >>
-                            </button>
-                            <button type="button" class="btn btn-secondary" onclick="supprimerMotCle()">
-                                << Supprimez
-                            </button>
-                        </div>
-
-                        <!-- Colonne droite : Mots-clés ajoutés -->
-                        <div class="col-md-4">
-                            <label for="motscles_choisis"><strong>Mots clés ajoutés</strong></label>
-                            <select id="motscles_choisis" name="motscles_choisis[]" class="form-control" style="height: 200px;" multiple size="10">
-                                <!-- Les mots-clés sélectionnés s'afficheront ici -->
-                            </select>
-                        </div>
-                    </div>
+                <!-- Upload Image -->
+                <div class="form-group mb-3">
+                    <label for="urlPhotArt">Image de l'article <span class="text-danger">*</span></label>
+                    <input id="urlPhotArt" name="urlPhotArt" class="form-control" type="file" accept="image/jpeg,image/jpg,image/png,image/gif" required />
+                    <small class="form-text text-muted">Formats acceptés : JPG, JPEG, PNG, GIF</small>
                 </div>
 
                 <br />
                 <div class="form-group mt-2">
                     <a href="list.php" class="btn btn-primary">List</a>
-                    <button type="submit" class="btn btn-success">Créer l'article</button>
+                    <button type="submit" class="btn btn-success">Confirmer create ?</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<script>
-// Fonction pour ajouter les mots-clés sélectionnés de la colonne gauche vers la droite
-function ajouterMotCle() {
-    const selectDisponibles = document.getElementById('motscles_disponibles');
-    const selectChoisis = document.getElementById('motscles_choisis');
-    
-    // Récupérer les options sélectionnées dans la colonne de gauche
-    Array.from(selectDisponibles.selectedOptions).forEach(option => {
-        // Vérifier que le mot n'existe pas déjà dans la colonne de droite
-        const exists = Array.from(selectChoisis.options).some(opt => opt.value === option.value);
-        if (!exists) {
-            // Ajouter à la colonne de droite
-            const newOption = new Option(option.text, option.value);
-            selectChoisis.appendChild(newOption);
-        }
-        // Supprimer de la colonne de gauche
-        option.remove();
-    });
-}
-
-// Fonction pour retirer les mots-clés sélectionnés de la colonne droite vers la gauche
-function supprimerMotCle() {
-    const selectDisponibles = document.getElementById('motscles_disponibles');
-    const selectChoisis = document.getElementById('motscles_choisis');
-    
-    // Récupérer les options sélectionnées dans la colonne de droite
-    Array.from(selectChoisis.selectedOptions).forEach(option => {
-        // Vérifier que le mot n'existe pas déjà dans la colonne de gauche
-        const exists = Array.from(selectDisponibles.options).some(opt => opt.value === option.value);
-        if (!exists) {
-            // Ajouter à la colonne de gauche
-            const newOption = new Option(option.text, option.value);
-            selectDisponibles.appendChild(newOption);
-        }
-        // Supprimer de la colonne de droite
-        option.remove();
-    });
-}
-</script>
-
-<script>
-// Fonction pour supprimer un mot-clé de la liste des mots-clés disponibles (colonne de gauche)
-function supprimerMotCle() {
-    const selectDisponibles = document.getElementById('motscles_disponibles');
-    
-    // Supprimer les options sélectionnées dans la colonne de gauche
-    Array.from(selectDisponibles.selectedOptions).forEach(option => {
-        option.remove();
-    });
-}
-</script>
 <?php
 include '../../../footer.php';
+?>
