@@ -1,34 +1,23 @@
 <?php
-// Include the main header file containing database and utility functions
-include '../../header.php';
+session_start();
 
-// ========== ÉTAPE 1 : DESTRUCTION DE LA SESSION ==========
-// ========================================================
-// Supprimer toutes les données stockées dans $_SESSION
-// Cela inclut les informations de l'utilisateur, les tokens d'authentification, etc.
+// Détruire toutes les sessions
+$_SESSION = array();
 
-session_destroy();
-// session_destroy() ferme la session courante et supprime les données associées
-// Après l'appel de session_destroy(), on ne peut plus accéder à $_SESSION
-
-// ========== ÉTAPE 2 : SUPPRESSION DES COOKIES D'AUTHENTIFICATION ==========
-// ======================================================================
-// Si des cookies d'authentification ont été créés (par exemple "remember_token"),
-// les supprimer en les expirant immédiatement
-
-// Supprimer le cookie "remember_token" s'il existe
-// Pour supprimer un cookie, on le recrée avec une date d'expiration dans le passé
-if(isset($_COOKIE['remember_token'])){
-    setcookie('remember_token', '', time() - 3600, '/', '', false, true);
-    // time() - 3600 : date d'expiration 1 heure dans le passé
-    // Cela indique au navigateur de supprimer le cookie
+if (ini_get("session.use_cookies")) {
+    $params = session_get_cookie_params();
+    setcookie(session_name(), '', time() - 42000,
+        $params["path"], $params["domain"],
+        $params["secure"], $params["httponly"]
+    );
 }
 
-// ========== ÉTAPE 3 : REDIRECTION VERS LA PAGE D'ACCUEIL ==========
-// ================================================================
-// Après déconnexion, rediriger l'utilisateur vers la page d'accueil
-// et afficher un message de confirmation
+session_destroy();
 
-header('Location: ' . ROOT_URL . '/index.php?success=logout_ok');
-exit();
+// Message de déconnexion
+session_start();
+$_SESSION['logout_success'] = "Vous avez été déconnecté avec succès.";
+
+header('Location: ../../index.php');
+exit;
 ?>

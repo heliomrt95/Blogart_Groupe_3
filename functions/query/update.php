@@ -12,14 +12,7 @@ function sql_update($table, $attributs, $where) {
         $DB->beginTransaction();
 
         //prepare query for PDO
-        // Construire la clause SET à partir du tableau d'attributs
-        $setClause = "";
-        foreach($attributs as $key => $value){
-            $setClause .= $key . " = '" . $value . "', ";
-        }
-        $setClause = rtrim($setClause, ", ");
-        
-        $query = "UPDATE $table SET $setClause WHERE $where;";
+        $query = "UPDATE $table SET $attributs WHERE $where;";
         $request = $DB->prepare($query);
         $request->execute();
         $DB->commit();

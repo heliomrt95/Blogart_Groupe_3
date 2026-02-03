@@ -1,101 +1,118 @@
 <?php
-// Include the main header file containing database and utility functions
-include '../../header.php';
+session_start();
+require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
+require_once '../../functions/ctrlSaisies.php';
 
-// Vérifier si une demande POST a été envoyée (formulaire de connexion soumis)
-if($_POST){
-
-    // Récupérer les données du formulaire de connexion depuis /views/backend/security/login.php
-    
-    $identifiant = trim($_POST['identifiant']);         // Pseudo ou email de l'utilisateur
-    $passwordMemb = $_POST['passwordMemb'];             // Mot de passe fourni par l'utilisateur
-    $rememberMe = isset($_POST['rememberMe']) ? true : false; // Case "Se souvenir de moi"
-
-    // Chercher l'utilisateur dans la table MEMBRE en utilisant soit le pseudo soit l'email
-    // L'utilisateur peut se connecter avec l'une ou l'autre de ces informations
-    
-    // D'abord, essayer de trouver par pseudo
-    // addslashes() pour échapper les caractères spéciaux dans la clause WHERE
-    $user = sql_select("MEMBRE", "*", "pseudoMemb = '" . addslashes($identifiant) . "'");
-    
-    // Si pas trouvé par pseudo, essayer par email
-    if(empty($user)){
-        $user = sql_select("MEMBRE", "*", "eMailMemb = '" . addslashes($identifiant) . "'");
-    }
-
-    if(empty($user)){
-        // Aucun utilisateur trouvé avec ce pseudo ou cet email
-        // Rediriger vers le formulaire de login avec message d'erreur
-        header('Location: ' . ROOT_URL . '/views/backend/security/login.php?error=user_not_found');
-        exit();
-    }
-    
-    // Récupérer le premier (et seul) résultat
-    $user = $user[0];
-    
-    // IMPORTANT SÉCURITÉ : Utiliser password_verify() pour comparer le mot de passe saisi
-    // avec le hash stocké en base de données
-    //
-    // password_verify($input, $hash) :
-    // - Prend le mot de passe en clair fourni par l'utilisateur ($passwordMemb)
-    // - Le compare avec le hash bcrypt stocké en BDD ($user['passwordMemb'])
-    // - Retourne TRUE si ils correspondent, FALSE sinon
-    // - Même si quelqu'un obtient le hash, il ne peut pas le "inverser" pour obtenir le mot de passe
-    
-    if(!password_verify($passwordMemb, $user['passwordMemb'])){
-        // Le mot de passe ne correspond pas
-        // Rediriger vers le formulaire de login avec message d'erreur
-        header('Location: ' . ROOT_URL . '/views/backend/security/login.php?error=invalid_credentials');
-        exit();
-    }
-    
-    // Le mot de passe est correct, créer une session pour l'utilisateur
-    // Les données de session seront stockées dans $_SESSION et persisteront entre les pages
-    
-    // Stocker les informations de l'utilisateur dans la session
-    $_SESSION['user_id'] = $user['numMemb'];           // ID unique de l'utilisateur
-    $_SESSION['pseudoMemb'] = $user['pseudoMemb'];     // Pseudo (pour afficher dans la nav)
-    $_SESSION['eMailMemb'] = $user['eMailMemb'];       // Email
-    $_SESSION['prenomMemb'] = $user['prenomMemb'];     // Prénom
-    $_SESSION['nomMemb'] = $user['nomMemb'];           // Nom
-    $_SESSION['numStat'] = $user['numStat'];           // Statut (admin, modo, user, etc.)
-    $_SESSION['login_time'] = time();                  // Timestamp de connexion
-    $_SESSION['authenticated'] = true;                 // Flag d'authentification
-
-    // Si l'utilisateur a coché "Se souvenir de moi", créer un token persistant
-    // Ce token sera stocké en cookie pour permettre une reconnexion automatique
-    
-    if($rememberMe){
-        // Générer un token aléatoire sécurisé
-        $rememberToken = bin2hex(random_bytes(32)); // 64 caractères hexadécimaux aléatoires
-        
-        // Créer un cookie qui expire dans 30 jours
-        $cookie_expiry = time() + (30 * 24 * 60 * 60); // 30 jours en secondes
-        setcookie(
-            'remember_token',           // Nom du cookie
-            $rememberToken,             // Valeur du token
-            $cookie_expiry,             // Date d'expiration
-            '/',                        // Chemin (accessible partout)
-            '',                         // Domaine (vide = domaine courant)
-            false,                      // Secure (false pour HTTP, true pour HTTPS)
-            true                        // HttpOnly (true = non accessible en JavaScript)
-        );
-        
-        // Optionnel : sauvegarder le token en BDD pour validation ultérieure
-        // Cela permettrait d'invalider les tokens en cas de changement de mot de passe
-        // sql_update("MEMBRE", ["rememberToken" => $rememberToken], "numMemb = " . $user['numMemb']);
-    }
-    
-    // L'authentification a réussi, rediriger vers le dashboard ou la page d'accueil
-    // En fonction du statut de l'utilisateur, on pourrait rediriger vers des pages différentes
-    
-    if($user['numStat'] == 1){  // Supposons que numStat=1 est admin
-        // Admin : rediriger vers le dashboard admin
-        header('Location: ' . ROOT_URL . '/views/backend/dashboard.php');
-    } else {
-        // Utilisateur normal : rediriger vers la page d'accueil
-        header('Location: ' . ROOT_URL . '/index.php');
-    }
-    exit();
+// === VÉRIFICATION reCAPTCHA v3 ===
+if(!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response'])) {
+    $_SESSION['signup_error'] = "Veuillez valider le reCAPTCHA.";
+    header('Location: ../../views/backend/security/signup.php');
+    exit;
 }
+
+$token = $_POST['g-recaptcha-response'];
+$url = 'https://www.google.com/recaptcha/api/siteverify';
+
+$data = array(
+    'secret' => '6LcW8l0sAAAAALUKpIDotR7ZxfWqIjw58OFvJ4OE',
+    'response' => $token
+);
+
+$options = array(
+    'http' => array (
+        'header' => "Content-Type: application/x-www-form-urlencoded\r\n",
+        'method' => 'POST',
+        'content' => http_build_query($data)
+    )
+);
+
+$context = stream_context_create($options);
+$result = file_get_contents($url, false, $context);
+$response = json_decode($result);
+
+if (!$response->success || $response->score < 0.5) {
+    $_SESSION['signup_error'] = "Échec de validation reCAPTCHA. Veuillez réessayer.";
+    header('Location: ../../views/backend/security/signup.php');
+    exit;
+}
+
+// Récupération des données
+$pseudo = isset($_POST['pseudo']) ? addslashes(trim($_POST['pseudo'])) : '';
+$prenom = isset($_POST['prenom']) ? addslashes(trim($_POST['prenom'])) : '';
+$nom = isset($_POST['nom']) ? addslashes(trim($_POST['nom'])) : '';
+$password = isset($_POST['password']) ? trim($_POST['password']) : '';
+$password_confirm = isset($_POST['password_confirm']) ? trim($_POST['password_confirm']) : '';
+$email = isset($_POST['email']) ? addslashes(trim($_POST['email'])) : '';
+$email_confirm = isset($_POST['email_confirm']) ? addslashes(trim($_POST['email_confirm'])) : '';
+$rgpd = isset($_POST['rgpd']) ? (int)$_POST['rgpd'] : 0;
+
+// Validation pseudo
+if(strlen($pseudo) < 6 || strlen($pseudo) > 70) {
+    $_SESSION['signup_error'] = "Le pseudo doit contenir entre 6 et 70 caractères.";
+    header('Location: ../../views/backend/security/signup.php');
+    exit;
+}
+
+// Vérifier unicité pseudo
+$existing = sql_select("MEMBRE", "COUNT(*) as nb", "pseudoMemb = '$pseudo'");
+if($existing[0]['nb'] > 0) {
+    $_SESSION['signup_error'] = "Ce pseudo est déjà utilisé.";
+    header('Location: ../../views/backend/security/signup.php');
+    exit;
+}
+
+// Vérifier emails
+if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $_SESSION['signup_error'] = "Email invalide.";
+    header('Location: ../../views/backend/security/signup.php');
+    exit;
+}
+
+if($email !== $email_confirm) {
+    $_SESSION['signup_error'] = "Les emails ne correspondent pas.";
+    header('Location: ../../views/backend/security/signup.php');
+    exit;
+}
+
+// Vérifier passwords
+if($password !== $password_confirm) {
+    $_SESSION['signup_error'] = "Les mots de passe ne correspondent pas.";
+    header('Location: ../../views/backend/security/signup.php');
+    exit;
+}
+
+if(strlen($password) < 8 || strlen($password) > 15) {
+    $_SESSION['signup_error'] = "Le mot de passe doit contenir entre 8 et 15 caractères.";
+    header('Location: ../../views/backend/security/signup.php');
+    exit;
+}
+
+// Vérifier RGPD
+if($rgpd != 1) {
+    $_SESSION['signup_error'] = "Vous devez accepter que vos données soient conservées.";
+    header('Location: ../../views/backend/security/signup.php');
+    exit;
+}
+
+// Hasher le password
+$passMemb = password_hash($password, PASSWORD_DEFAULT);
+
+// Récupérer le statut "Membre"
+$statut = sql_select("STATUT", "numStat", "libStat = 'Membre'");
+if(count($statut) == 0) {
+    sql_insert('STATUT', 'libStat', "'Membre'");
+    $statut = sql_select("STATUT", "numStat", "libStat = 'Membre'");
+}
+$numStat = $statut[0]['numStat'];
+
+// Insertion
+$columns = 'pseudoMemb, prenomMemb, nomMemb, passMemb, eMailMemb, accordMemb, numStat';
+$values = "'$pseudo', '$prenom', '$nom', '$passMemb', '$email', $rgpd, $numStat";
+
+sql_insert('MEMBRE', $columns, $values);
+
+// MESSAGE DE SUCCÈS
+$_SESSION['signup_success'] = "✅ Votre compte a été créé avec succès ! Vous pouvez maintenant vous connecter avec votre pseudo : <strong>$pseudo</strong>";
+header('Location: ../../views/backend/security/login.php');
+exit;
 ?>
