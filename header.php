@@ -22,17 +22,17 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
     <!-- GOOGLE FONTS - POPPINS -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- FONT AWESOME -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- BOOTSTRAP ICONS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
-    <!-- TON CSS MINIMAL -->
+    <!-- CSS -->
     <link rel="stylesheet" href="/src/css/style.css" />
     
     <link rel="shortcut icon" href="/src/images/logo.png" />
 </head>
 <body>
 
-<!-- NAVBAR BOOTSTRAP - BLEU FONCÉ #2F509E -->
+<!-- NAVBAR BOOTSTRAP -->
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2F509E;">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="/index.php">
@@ -44,7 +44,7 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
         </button>
         
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item">
                     <a class="nav-link <?php echo ($current_page == 'index') ? 'fw-bold' : ''; ?>" 
                        href="/index.php">Accueil</a>
@@ -54,8 +54,23 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
                        href="/views/frontend/articles.php">Articles</a>
                 </li>
                 
+                <!-- ✅ BARRE DE RECHERCHE -->
+                <li class="nav-item d-none d-lg-block ms-3">
+                    <form action="/views/frontend/search.php" method="GET" class="d-flex">
+                        <div class="input-group input-group-sm">
+                            <input type="text" 
+                                   class="form-control" 
+                                   name="q" 
+                                   placeholder="Rechercher..." 
+                                   style="width: 180px; border-radius: 20px 0 0 20px;">
+                            <button class="btn btn-light" type="submit" style="border-radius: 0 20px 20px 0;">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </li>
+                
                 <?php if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
-                    <!-- Utilisateur CONNECTÉ -->
                     
                     <?php if(isset($_SESSION['user_statut_nom']) && $_SESSION['user_statut_nom'] === 'Modérateur'): ?>
                         <li class="nav-item">
@@ -69,7 +84,6 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
                         </a>
                     </li>
                 <?php else: ?>
-                    <!-- Utilisateur NON CONNECTÉ -->
                     <li class="nav-item">
                         <a class="nav-link <?php echo ($current_page == 'login') ? 'fw-bold' : ''; ?>" 
                            href="/views/backend/security/login.php">Connexion</a>
@@ -79,3 +93,20 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
         </div>
     </div>
 </nav>
+
+<!-- ✅ BARRE DE RECHERCHE MOBILE (en dessous de la navbar sur petit écran) -->
+<div class="d-lg-none bg-light border-bottom py-2">
+    <div class="container">
+        <form action="/views/frontend/search.php" method="GET">
+            <div class="input-group input-group-sm">
+                <input type="text" 
+                       class="form-control" 
+                       name="q" 
+                       placeholder="Rechercher un article...">
+                <button class="btn btn-primary" type="submit" style="background-color: #2F509E; border: none;">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

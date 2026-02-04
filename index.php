@@ -192,52 +192,44 @@ $articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
         <h2 class="mb-4">Notre équipe</h2>
         
         <div class="team-grid">
-            <!-- Membre 1 -->
+            <!-- Membre 1 - Tom WILLIOT -->
             <div class="team-member">
                 <div class="team-avatar">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" viewBox="0 0 24 24" width="60" height="60">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
+                    <img src="/src/images/equipe/tom.jpg" alt="Tom WILLIOT">
                 </div>
-                <h3 class="team-name">Tom Williot</h3>
+                <h3 class="team-name">Tom WILLIOT</h3>
                 <p class="team-role">Blogeur</p>
-                <p class="team-description">Enjoys adventurous travel, seeks new cultures and offbeat</p>
+                <p class="team-description">Rédacteur en chef</p>
             </div>
             
-            <!-- Membre 2 -->
+            <!-- Membre 2 - Remi SOULARD -->
             <div class="team-member">
                 <div class="team-avatar">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" viewBox="0 0 24 24" width="60" height="60">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
+                    <img src="/src/images/equipe/remi.jpg" alt="Remi SOULARD">
                 </div>
-                <h3 class="team-name">Remi Soulard</h3>
+                <h3 class="team-name">Remi SOULARD</h3>
                 <p class="team-role">Blogeur</p>
-                <p class="team-description">Pop music lover, seeks joy and exciting pop concerts</p>
+                <p class="team-description">Rédacteur adjoint</p>
             </div>
             
-            <!-- Membre 3 -->
+            <!-- Membre 3 - Helio MARTONE -->
             <div class="team-member">
                 <div class="team-avatar">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" viewBox="0 0 24 24" width="60" height="60">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
+                    <img src="/src/images/equipe/helio.jpg" alt="Helio MARTONE">
                 </div>
-                <h3 class="team-name">Helio Martone</h3>
+                <h3 class="team-name">Helio MARTONE</h3>
                 <p class="team-role">Blogeur</p>
-                <p class="team-description">Bookworm, creative software developer with precision</p>
+                <p class="team-description">Directeur des opérations de développement</p>
             </div>
             
-            <!-- Membre 4 -->
+            <!-- Membre 4 - Khalid LOTF -->
             <div class="team-member">
                 <div class="team-avatar">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" viewBox="0 0 24 24" width="60" height="60">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
+                    <img src="/src/images/equipe/khalid.jpg" alt="Khalid LOTF">
                 </div>
-                <h3 class="team-name">Khalid Lotf</h3>
+                <h3 class="team-name">Khalid LOTF</h3>
                 <p class="team-role">Blogeur</p>
-                <p class="team-description">Creative painter capturing beauty with imaginative artwork</p>
+                <p class="team-description">Développeur web et rédacteur adjoint</p>
             </div>
         </div>
     </div>
@@ -260,20 +252,17 @@ $articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
             
             <!-- TEXTE à droite -->
             <div class="localisation-text">
-                <h3>Lorem ipsum dolor sit amet, consectetur aiscing</h3>
+                <h3>Un périmètre d’étude de Bacalan aux Chartrons</h3>
                 
                 <p>
-                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore 
-                    eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.
+                    L’actualité traitée ici se concentre sur la rive gauche, couvrant l’axe fluvial de Bacalan au centre-ville. Nous suivons l’évolution urbaine des Bassins à flot et des Chartrons, points névralgiques du dynamisme bordelais.
                 </p>
                 
                 <p>
-                    Duis aute irure dolor in reprehenderit in voluptate Duis aute irure dolor in 
-                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                    Excepteur sint occaecat cupidatat non proident.
+                    Ce champ d’observation s’étend vers Bordeaux-Lac et intègre les espaces limitrophes comme le Jardin Public. Cette délimitation permet une information rigoureuse, ancrée dans la réalité quotidienne de ces quartiers en mutation.
                 </p>
                 
-                <a href="#" class="btn btn-explorer">Explorer</a>
+                <a href="/views/frontend/articles.php" class="btn btn-explorer">Explorer</a>
             </div>
         </div>
     </div>
