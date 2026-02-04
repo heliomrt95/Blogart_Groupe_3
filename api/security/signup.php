@@ -1,12 +1,11 @@
 <?php
 session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
-require_once '../../functions/ctrlSaisies.php';
 
 // === VÉRIFICATION reCAPTCHA v3 ===
 if(!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response'])) {
     $_SESSION['signup_error'] = "Veuillez valider le reCAPTCHA.";
-    header('Location: ../../views/backend/security/signup.php');
+    header('Location: /views/backend/security/signup.php');
     exit;
 }
 
@@ -32,7 +31,7 @@ $response = json_decode($result);
 
 if (!$response->success || $response->score < 0.5) {
     $_SESSION['signup_error'] = "Échec de validation reCAPTCHA. Veuillez réessayer.";
-    header('Location: ../../views/backend/security/signup.php');
+    header('Location: /views/backend/security/signup.php');
     exit;
 }
 
@@ -49,7 +48,7 @@ $rgpd = isset($_POST['rgpd']) ? (int)$_POST['rgpd'] : 0;
 // Validation pseudo
 if(strlen($pseudo) < 6 || strlen($pseudo) > 70) {
     $_SESSION['signup_error'] = "Le pseudo doit contenir entre 6 et 70 caractères.";
-    header('Location: ../../views/backend/security/signup.php');
+    header('Location: /views/backend/security/signup.php');
     exit;
 }
 
@@ -57,40 +56,40 @@ if(strlen($pseudo) < 6 || strlen($pseudo) > 70) {
 $existing = sql_select("MEMBRE", "COUNT(*) as nb", "pseudoMemb = '$pseudo'");
 if($existing[0]['nb'] > 0) {
     $_SESSION['signup_error'] = "Ce pseudo est déjà utilisé.";
-    header('Location: ../../views/backend/security/signup.php');
+    header('Location: /views/backend/security/signup.php');
     exit;
 }
 
 // Vérifier emails
 if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $_SESSION['signup_error'] = "Email invalide.";
-    header('Location: ../../views/backend/security/signup.php');
+    header('Location: /views/backend/security/signup.php');
     exit;
 }
 
 if($email !== $email_confirm) {
     $_SESSION['signup_error'] = "Les emails ne correspondent pas.";
-    header('Location: ../../views/backend/security/signup.php');
+    header('Location: /views/backend/security/signup.php');
     exit;
 }
 
 // Vérifier passwords
 if($password !== $password_confirm) {
     $_SESSION['signup_error'] = "Les mots de passe ne correspondent pas.";
-    header('Location: ../../views/backend/security/signup.php');
+    header('Location: /views/backend/security/signup.php');
     exit;
 }
 
 if(strlen($password) < 8 || strlen($password) > 15) {
     $_SESSION['signup_error'] = "Le mot de passe doit contenir entre 8 et 15 caractères.";
-    header('Location: ../../views/backend/security/signup.php');
+    header('Location: /views/backend/security/signup.php');
     exit;
 }
 
 // Vérifier RGPD
 if($rgpd != 1) {
     $_SESSION['signup_error'] = "Vous devez accepter que vos données soient conservées.";
-    header('Location: ../../views/backend/security/signup.php');
+    header('Location: /views/backend/security/signup.php');
     exit;
 }
 
@@ -113,6 +112,6 @@ sql_insert('MEMBRE', $columns, $values);
 
 // MESSAGE DE SUCCÈS
 $_SESSION['signup_success'] = "✅ Votre compte a été créé avec succès ! Vous pouvez maintenant vous connecter avec votre pseudo : <strong>$pseudo</strong>";
-header('Location: ../../views/backend/security/login.php');
+header('Location: /views/backend/security/login.php');
 exit;
 ?>

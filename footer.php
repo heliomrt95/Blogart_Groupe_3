@@ -7,7 +7,7 @@
             
             <!-- Colonne 1 : Logo -->
             <div class="col-md-3">
-                <img src="/src/images/logo.png" alt="LEKÉ" height="200" class="mb-3">
+                <img src="/src/images/logo.png" alt="LEKÉ" height="35" class="me-2">
             </div>
             
             <!-- Colonne 2 : À propos -->
@@ -66,21 +66,21 @@
                 
                 <h6 class="fw-semibold mb-3">Réseaux sociaux</h6>
                 <div class="d-flex gap-3">
-                    <a href="#" class="text-white fs-5"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="text-white fs-5"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="text-white fs-5"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-white fs-5"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="text-white fs-5"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="text-white fs-5"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-white fs-5"><i class="bi bi-twitter"></i></a>
+                    <a href="#" class="text-white fs-5"><i class="bi bi-youtube"></i></a>
                 </div>
             </div>
             
         </div>
         
-        <!-- VERSION MOBILE (< 768px) - LAYOUT CENTRÉ COMME LA MAQUETTE -->
+        <!-- VERSION MOBILE (< 768px) - LAYOUT CENTRÉ -->
         <div class="d-md-none text-center">
             
             <!-- Logo centré -->
             <div class="mb-4">
-                <img src="/src/images/logo.png" alt="LEKÉ" height="200" class="mb-3">
+                <img src="/src/images/logo.png" alt="LEKÉ";">
             </div>
             
             <!-- À propos -->
@@ -128,16 +128,16 @@
                 <h5 class="fw-semibold mb-3">Réseaux sociaux</h5>
                 <div class="d-flex gap-4 justify-content-center">
                     <a href="#" class="text-white" style="font-size: 2rem;">
-                        <i class="fab fa-facebook"></i>
+                        <i class="bi bi-facebook"></i>
                     </a>
                     <a href="#" class="text-white" style="font-size: 2rem;">
-                        <i class="fab fa-instagram"></i>
+                        <i class="bi bi-instagram"></i>
                     </a>
                     <a href="#" class="text-white" style="font-size: 2rem;">
-                        <i class="fab fa-twitter"></i>
+                        <i class="bi bi-twitter"></i>
                     </a>
                     <a href="#" class="text-white" style="font-size: 2rem;">
-                        <i class="fab fa-youtube"></i>
+                        <i class="bi bi-youtube"></i>
                     </a>
                 </div>
             </div>
@@ -149,7 +149,7 @@
         
         <!-- Copyright -->
         <div class="text-center">
-            <small style="opacity: 0.7;">© 2026 LEKÉ | MMI2B</small>
+            <small style="opacity: 0.7;">© 2026 LEKÉ | MMI28</small>
         </div>
     </div>
 </footer>
@@ -159,5 +159,3 @@
 
 </body>
 </html>
-
-

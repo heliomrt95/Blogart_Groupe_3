@@ -60,6 +60,37 @@ $values = "'$libTitrArt', '$libChapoArt', '$libAccrochArt', '$parag1Art', '$libS
 // Exécution de l'insertion
 sql_insert('ARTICLE', $columns, $values);
 
+// ✅ NOUVEAU : Récupérer l'ID de l'article qui vient d'être créé
+global $DB;
+$lastArticleId = $DB->lastInsertId();
+
+// ✅ NOUVEAU : Traiter les mots-clés
+if (isset($_POST['motscles']) && !empty(trim($_POST['motscles']))) {
+    $motscles = trim($_POST['motscles']);
+    
+    // Séparer par virgule et nettoyer
+    $keywords = array_map('trim', explode(',', $motscles));
+    
+    foreach ($keywords as $keyword) {
+        if (!empty($keyword)) {
+            // Vérifier si le mot-clé existe déjà
+            $existing = sql_select("MOTCLE", "numMotCle", "libMotCle = '" . addslashes($keyword) . "'");
+            
+            if (count($existing) > 0) {
+                // Le mot-clé existe, récupérer son ID
+                $keywordId = $existing[0]['numMotCle'];
+            } else {
+                // Créer le nouveau mot-clé
+                sql_insert('MOTCLE', 'libMotCle', "'" . addslashes($keyword) . "'");
+                $keywordId = $DB->lastInsertId();
+            }
+            
+            // Lier le mot-clé à l'article (table MOTCLEARTICLE)
+            sql_insert('MOTCLEARTICLE', 'numArt, numMotCle', "$lastArticleId, $keywordId");
+        }
+    }
+}
+
 // Redirection vers la liste des articles
 header('Location: ../../views/backend/articles/list.php');
 ?>
