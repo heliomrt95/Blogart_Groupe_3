@@ -6,10 +6,10 @@ $thematiques = sql_select("THEMATIQUE", "*");
 ?>
 
 <!-- Bootstrap form to create a new article -->
-<div class="container">
+<div class="container py-5">
     <div class="row">
         <div class="col-md-12">
-            <h1>Création nouvel Article</h1>
+            <h1 class="mb-4">Création nouvel Article</h1>
         </div>
         <div class="col-md-12">
             <!-- Form to create a new article -->
@@ -91,6 +91,18 @@ $thematiques = sql_select("THEMATIQUE", "*");
                     </select>
                 </div>
 
+                <!-- ✅ NOUVEAU : Mots-clés -->
+                <div class="form-group mb-3">
+                    <label for="motscles">Mots-clés</label>
+                    <input id="motscles" 
+                           name="motscles" 
+                           class="form-control" 
+                           type="text" 
+                           maxlength="60" 
+                           placeholder="quais, bordeaux, garonne, histoire" />
+                    <small class="form-text text-muted">Maximum 60 caractères. Séparez les mots-clés par des virgules.</small>
+                </div>
+
                 <!-- Upload Image -->
                 <div class="form-group mb-3">
                     <label for="urlPhotArt">Image de l'article <span class="text-danger">*</span></label>
@@ -100,8 +112,12 @@ $thematiques = sql_select("THEMATIQUE", "*");
 
                 <br />
                 <div class="form-group mt-2">
-                    <a href="list.php" class="btn btn-primary">List</a>
-                    <button type="submit" class="btn btn-success">Confirmer create ?</button>
+                    <a href="list.php" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Retour
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-lg me-2"></i>Créer l'article
+                    </button>
                 </div>
             </form>
         </div>

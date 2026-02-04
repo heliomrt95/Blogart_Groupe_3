@@ -35,7 +35,7 @@ if (isset($_SESSION['signup_error'])) {
                             </label>
                             <div class="input-group">
                                 <span class="input-group-text">
-                                    <i class="fas fa-user"></i>
+                                    <i class="bi bi-person-fill"></i>
                                 </span>
                                 <input type="text" 
                                        class="form-control" 
@@ -75,7 +75,7 @@ if (isset($_SESSION['signup_error'])) {
                             <label for="email" class="form-label">eMail</label>
                             <div class="input-group">
                                 <span class="input-group-text">
-                                    <i class="fas fa-envelope"></i>
+                                    <i class="bi bi-envelope-fill"></i>
                                 </span>
                                 <input type="email" 
                                        class="form-control" 
@@ -91,7 +91,7 @@ if (isset($_SESSION['signup_error'])) {
                             <label for="email_confirm" class="form-label">Confirmez eMail</label>
                             <div class="input-group">
                                 <span class="input-group-text">
-                                    <i class="fas fa-envelope"></i>
+                                    <i class="bi bi-envelope-check-fill"></i>
                                 </span>
                                 <input type="email" 
                                        class="form-control" 
@@ -107,7 +107,7 @@ if (isset($_SESSION['signup_error'])) {
                             <label for="password" class="form-label">Mot de passe</label>
                             <div class="input-group">
                                 <span class="input-group-text">
-                                    <i class="fas fa-lock"></i>
+                                    <i class="bi bi-lock-fill"></i>
                                 </span>
                                 <input type="password" 
                                        class="form-control" 
@@ -119,8 +119,9 @@ if (isset($_SESSION['signup_error'])) {
                                        required>
                                 <button class="btn btn-outline-secondary" 
                                         type="button" 
-                                        id="togglePassword">
-                                    <i class="fas fa-eye-slash"></i>
+                                        id="togglePassword"
+                                        style="border: none; background: transparent;">
+                                    <i class="bi bi-eye-slash"></i>
                                 </button>
                             </div>
                             <small class="form-text text-muted">Entre 8 et 15 caractères.</small>
@@ -131,7 +132,7 @@ if (isset($_SESSION['signup_error'])) {
                             <label for="password_confirm" class="form-label">Confirmez mot de passe</label>
                             <div class="input-group">
                                 <span class="input-group-text">
-                                    <i class="fas fa-lock"></i>
+                                    <i class="bi bi-lock-fill"></i>
                                 </span>
                                 <input type="password" 
                                        class="form-control" 
@@ -143,8 +144,9 @@ if (isset($_SESSION['signup_error'])) {
                                        required>
                                 <button class="btn btn-outline-secondary" 
                                         type="button" 
-                                        id="togglePasswordConfirm">
-                                    <i class="fas fa-eye-slash"></i>
+                                        id="togglePasswordConfirm"
+                                        style="border: none; background: transparent;">
+                                    <i class="bi bi-eye-slash"></i>
                                 </button>
                             </div>
                         </div>
@@ -225,12 +227,12 @@ document.getElementById('togglePassword').addEventListener('click', function() {
     
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
+        icon.classList.remove('bi-eye-slash');
+        icon.classList.add('bi-eye');
     } else {
         passwordInput.type = 'password';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
+        icon.classList.remove('bi-eye');
+        icon.classList.add('bi-eye-slash');
     }
 });
 
@@ -241,12 +243,12 @@ document.getElementById('togglePasswordConfirm').addEventListener('click', funct
     
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
+        icon.classList.remove('bi-eye-slash');
+        icon.classList.add('bi-eye');
     } else {
         passwordInput.type = 'password';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
+        icon.classList.remove('bi-eye');
+        icon.classList.add('bi-eye-slash');
     }
 });
 </script>
