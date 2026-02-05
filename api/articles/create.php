@@ -4,6 +4,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 // Inclusion de la fonction de contrôle des saisies
 require_once '../../functions/ctrlSaisies.php';
 
+// ✅ CONNEXION À LA BASE DE DONNÉES
+sql_connect();
+global $DB;
+
 // Récupération des données avec protection
 $libTitrArt = addslashes($_POST['libTitrArt']);
 $libChapoArt = addslashes($_POST['libChapoArt']);
@@ -15,7 +19,7 @@ $libSsTitr2Art = addslashes($_POST['libSsTitr2Art']);
 $parag3Art = addslashes($_POST['parag3Art']);
 $libConclArt = addslashes($_POST['libConclArt']);
 // Récupération de la thématique associée
-$numThem = $_POST['numThem'];
+$numThem = (int)$_POST['numThem'];
 
 // Gestion de l'upload d'image
 $urlPhotArt = '';
@@ -51,46 +55,65 @@ if(isset($_FILES['urlPhotArt']) && $_FILES['urlPhotArt']['error'] == 0) {
     }
 }
 
-// Insertion en base de données
-// Définition des colonnes de la table ARTICLE
-$columns = 'libTitrArt, libChapoArt, libAccrochArt, parag1Art, libSsTitr1Art, parag2Art, libSsTitr2Art, parag3Art, libConclArt, urlPhotArt, numThem';
-// Définition des valeurs à insérer
-$values = "'$libTitrArt', '$libChapoArt', '$libAccrochArt', '$parag1Art', '$libSsTitr1Art', '$parag2Art', '$libSsTitr2Art', '$parag3Art', '$libConclArt', '$urlPhotArt', $numThem";
-
-// Exécution de l'insertion
-sql_insert('ARTICLE', $columns, $values);
-
-// ✅ NOUVEAU : Récupérer l'ID de l'article qui vient d'être créé
-global $DB;
-$lastArticleId = $DB->lastInsertId();
-
-// ✅ NOUVEAU : Traiter les mots-clés
-if (isset($_POST['motscles']) && !empty(trim($_POST['motscles']))) {
-    $motscles = trim($_POST['motscles']);
+// ✅ INSERTION DE L'ARTICLE AVEC PDO
+try {
+    // Préparer la requête d'insertion
+    $query = "INSERT INTO ARTICLE 
+              (libTitrArt, libChapoArt, libAccrochArt, parag1Art, libSsTitr1Art, 
+               parag2Art, libSsTitr2Art, parag3Art, libConclArt, urlPhotArt, numThem) 
+              VALUES 
+              (:libTitrArt, :libChapoArt, :libAccrochArt, :parag1Art, :libSsTitr1Art, 
+               :parag2Art, :libSsTitr2Art, :parag3Art, :libConclArt, :urlPhotArt, :numThem)";
     
-    // Séparer par virgule et nettoyer
-    $keywords = array_map('trim', explode(',', $motscles));
+    $stmt = $DB->prepare($query);
     
-    foreach ($keywords as $keyword) {
-        if (!empty($keyword)) {
-            // Vérifier si le mot-clé existe déjà
-            $existing = sql_select("MOTCLE", "numMotCle", "libMotCle = '" . addslashes($keyword) . "'");
+    // Exécuter l'insertion
+    $stmt->execute([
+        'libTitrArt' => $libTitrArt,
+        'libChapoArt' => $libChapoArt,
+        'libAccrochArt' => $libAccrochArt,
+        'parag1Art' => $parag1Art,
+        'libSsTitr1Art' => $libSsTitr1Art,
+        'parag2Art' => $parag2Art,
+        'libSsTitr2Art' => $libSsTitr2Art,
+        'parag3Art' => $parag3Art,
+        'libConclArt' => $libConclArt,
+        'urlPhotArt' => $urlPhotArt,
+        'numThem' => $numThem
+    ]);
+    
+    // ✅ RÉCUPÉRER L'ID DE L'ARTICLE
+    $lastArticleId = $DB->lastInsertId();
+    
+    // ✅ TRAITEMENT DES MOTS-CLÉS
+    if (isset($_POST['motscles']) && is_array($_POST['motscles']) && count($_POST['motscles']) > 0) {
+        
+        foreach ($_POST['motscles'] as $keywordId) {
+            $keywordId = (int)$keywordId;
             
-            if (count($existing) > 0) {
-                // Le mot-clé existe, récupérer son ID
-                $keywordId = $existing[0]['numMotCle'];
-            } else {
-                // Créer le nouveau mot-clé
-                sql_insert('MOTCLE', 'libMotCle', "'" . addslashes($keyword) . "'");
-                $keywordId = $DB->lastInsertId();
+            if ($keywordId > 0) {
+                // Vérifier que le mot-clé existe
+                $checkKeyword = $DB->prepare("SELECT numMotCle FROM MOTCLE WHERE numMotCle = :id");
+                $checkKeyword->execute(['id' => $keywordId]);
+                
+                if ($checkKeyword->rowCount() > 0) {
+                    // Insérer la liaison
+                    $insertLink = $DB->prepare("INSERT INTO MOTCLEARTICLE (numArt, numMotCle) VALUES (:numArt, :numMotCle)");
+                    $insertLink->execute([
+                        'numArt' => $lastArticleId,
+                        'numMotCle' => $keywordId
+                    ]);
+                }
             }
-            
-            // Lier le mot-clé à l'article (table MOTCLEARTICLE)
-            sql_insert('MOTCLEARTICLE', 'numArt, numMotCle', "$lastArticleId, $keywordId");
         }
     }
+    
+    // Redirection vers la liste des articles
+    header('Location: ../../views/backend/articles/list.php');
+    exit;
+    
+} catch (PDOException $e) {
+    // Afficher l'erreur pour déboguer
+    die("Erreur SQL : " . $e->getMessage());
 }
-
-// Redirection vers la liste des articles
-header('Location: ../../views/backend/articles/list.php');
 ?>

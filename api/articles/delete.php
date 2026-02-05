@@ -1,55 +1,64 @@
 <?php
-// Inclusion du fichier de configuration
-require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
-// Inclusion de la fonction de contrôle des saisies
-require_once '../../functions/ctrlSaisies.php';
+require_once '../../config.php';
 
-// Récupération de l'ID de l'article à supprimer
-$numArt = $_POST['numArt'];
-// Récupération du nom de l'image associée à l'article
-$urlPhotArt = $_POST['urlPhotArt'];
+// Connexion à la BDD
+sql_connect();
+global $DB;
 
-// Vérification d'intégrité référentielle : on vérifie si des commentaires existent pour cet article
-$comments = sql_select("COMMENT", "COUNT(*) as nb", "numArt = $numArt");
-$nbComments = $comments[0]['nb'];
+// Récupérer l'ID de l'article
+$numArt = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
-// Vérification d'intégrité référentielle : on vérifie si des likes existent pour cet article
-$likes = sql_select("LIKEART", "COUNT(*) as nb", "numArt = $numArt");
-$nbLikes = $likes[0]['nb'];
-
-// Vérification d'intégrité référentielle : on vérifie si des mots-clés sont associés à cet article
-$motcles = sql_select("MOTCLEARTICLE", "COUNT(*) as nb", "numArt = $numArt");
-$nbMotcles = $motcles[0]['nb'];
-
-// Vérification si l'article possède des données associées
-if($nbComments > 0 || $nbLikes > 0 || $nbMotcles > 0){
-    // L'article possède des relations, suppression impossible
-    // Construction d'un message d'erreur détaillé
-    $message = "Suppression impossible :\\n";
-    if($nbComments > 0) $message .= "- $nbComments commentaire(s) associé(s)\\n";
-    if($nbLikes > 0) $message .= "- $nbLikes like(s) associé(s)\\n";
-    if($nbMotcles > 0) $message .= "- $nbMotcles mot(s)-clé(s) associé(s)\\n";
-    
-    // Affichage d'une alerte et redirection vers la liste
-    echo "<script>alert('$message'); window.location.href='../../views/backend/articles/list.php';</script>";
+if ($numArt <= 0) {
+    header('Location: ../../views/backend/articles/list.php?error=ID invalide');
     exit;
-} else {
-    // Aucune relation détectée, suppression possible
+}
+
+try {
+    // Vérifier que l'article existe
+    $checkArticle = $DB->prepare("SELECT numArt FROM ARTICLE WHERE numArt = :id");
+    $checkArticle->execute(['id' => $numArt]);
     
-    // Suppression de l'image associée du serveur si elle existe
-    if(!empty($urlPhotArt)) {
-        // Construction du chemin complet de l'image
-        $image_path = $_SERVER['DOCUMENT_ROOT'] . '/src/uploads/' . $urlPhotArt;
-        // Vérification de l'existence du fichier et suppression
-        if(file_exists($image_path)) {
-            unlink($image_path);
+    if ($checkArticle->rowCount() == 0) {
+        header('Location: ../../views/backend/articles/list.php?error=Article introuvable');
+        exit;
+    }
+    
+    // ÉTAPE 1 : Supprimer les liaisons dans MOTCLEARTICLE
+    $deleteKeywords = $DB->prepare("DELETE FROM MOTCLEARTICLE WHERE numArt = :id");
+    $deleteKeywords->execute(['id' => $numArt]);
+    
+    // ÉTAPE 2 : Supprimer les commentaires liés
+    $deleteComments = $DB->prepare("DELETE FROM COMMENT WHERE numArt = :id");
+    $deleteComments->execute(['id' => $numArt]);
+    
+    // ÉTAPE 3 : Supprimer les likes liés
+    $deleteLikes = $DB->prepare("DELETE FROM LIKEART WHERE numArt = :id");
+    $deleteLikes->execute(['id' => $numArt]);
+    
+    // ÉTAPE 4 : Récupérer le nom de l'image pour la supprimer du serveur
+    $getImage = $DB->prepare("SELECT urlPhotArt FROM ARTICLE WHERE numArt = :id");
+    $getImage->execute(['id' => $numArt]);
+    $article = $getImage->fetch(PDO::FETCH_ASSOC);
+    
+    // ÉTAPE 5 : Supprimer l'article
+    $deleteArticle = $DB->prepare("DELETE FROM ARTICLE WHERE numArt = :id");
+    $deleteArticle->execute(['id' => $numArt]);
+    
+    // ÉTAPE 6 : Supprimer l'image du serveur
+    if ($article && !empty($article['urlPhotArt'])) {
+        $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/src/uploads/' . $article['urlPhotArt'];
+        if (file_exists($imagePath)) {
+            unlink($imagePath);
         }
     }
     
-    // Suppression de l'article de la base de données
-    sql_delete('ARTICLE', "numArt = $numArt");
+    // Redirection avec message de succès
+    header('Location: ../../views/backend/articles/list.php?success=deleted');
+    exit;
     
-    // Redirection vers la liste des articles
-    header('Location: ../../views/backend/articles/list.php');
+} catch (PDOException $e) {
+    // En cas d'erreur
+    header('Location: ../../views/backend/articles/list.php?error=' . urlencode($e->getMessage()));
+    exit;
 }
 ?>

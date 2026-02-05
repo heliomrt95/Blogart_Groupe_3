@@ -121,4 +121,22 @@ function reading_time($text) {
     $minutes = ceil($words / 200); // 200 mots par minute
     return max(1, $minutes);
 }
+
+/**
+ * Convertir les URLs en liens cliquables
+ * @param string $text Le texte contenant des URLs
+ * @return string Le texte avec les URLs transformées en liens HTML
+ */
+function make_links_clickable($text) {
+    // Échapper d'abord le HTML pour la sécurité
+    $text = htmlspecialchars($text);
+    
+    // Pattern pour détecter les URLs
+    $pattern = '#\b((https?|ftp)://[^\s<>]+)#i';
+    
+    // Remplacer les URLs par des liens cliquables
+    $text = preg_replace($pattern, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #2F509E; text-decoration: underline;">$1</a>', $text);
+    
+    return $text;
+}
 ?>
