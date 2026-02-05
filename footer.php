@@ -7,7 +7,7 @@
             
             <!-- Colonne 1 : Logo -->
             <div class="col-md-3">
-                <img src="/src/images/logo.png" alt="LEKÉ" height="35" class="me-2">
+                <img src="/src/images/logo.png" alt="LEKÉ" height="100" class="me-2">
             </div>
             
             <!-- Colonne 2 : À propos -->
