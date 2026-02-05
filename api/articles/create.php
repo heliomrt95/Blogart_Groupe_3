@@ -4,7 +4,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 // Inclusion de la fonction de contrôle des saisies
 require_once '../../functions/ctrlSaisies.php';
 
-// ✅ CONNEXION À LA BASE DE DONNÉES
+// CONNEXION À LA BASE DE DONNÉES
 sql_connect();
 global $DB;
 

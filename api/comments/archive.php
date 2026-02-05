@@ -23,7 +23,7 @@ try {
 	$stmt = $DB->prepare("UPDATE `COMMENT` SET delLogiq = 1, dtDelLogCom = NOW() WHERE numCom = :numCom");
 	$stmt->execute(['numCom' => $numCom]);
 } catch (PDOException $e) {
-	// Pour un débutant, on redirige simplement vers la liste (on pourrait logger l'erreur)
+	// on redirige simplement vers la liste (on pourrait logger l'erreur)
 	header('Location: ../../views/backend/comments/list.php');
 	exit;
 }

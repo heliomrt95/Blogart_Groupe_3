@@ -1,37 +1,15 @@
 <?php
-/**
- * API de création de commentaire
- * 
- * Ce fichier gère la soumission de nouveaux commentaires sur les articles.
- * Il supporte à la fois les requêtes AJAX et les soumissions de formulaire classiques.
- * 
- * Méthode : POST
- * 
- * Paramètres attendus :
- * - numArt (int)    : Identifiant de l'article commenté
- * - numMemb (int)   : Identifiant du membre qui commente
- * - libCom (string) : Contenu du commentaire (max 600 caractères)
- * - redirect (string, optionnel) : URL de redirection après soumission
- * - ajax (string, optionnel)     : Si '1', retourne une réponse JSON
- * 
- * @author Groupe 3 - BlogArt
- */
-
 // Démarrage de la session pour accéder aux données utilisateur
 session_start();
 
 // Inclusion du fichier de configuration (connexion BDD, constantes, etc.)
 require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 
-// ============================================================================
 // DÉTECTION DU TYPE DE REQUÊTE (AJAX ou classique)
-// ============================================================================
 // Permet d'adapter le format de réponse selon le type de requête
 $isAjax = isset($_POST['ajax']) && $_POST['ajax'] == '1';
 
-// ============================================================================
 // VÉRIFICATION DE L'AUTHENTIFICATION
-// ============================================================================
 // L'utilisateur doit être connecté pour pouvoir commenter
 if(!isset($_SESSION['user_id'])) {
     if ($isAjax) {
@@ -45,9 +23,8 @@ if(!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// ============================================================================
+
 // RÉCUPÉRATION ET NETTOYAGE DES DONNÉES DU FORMULAIRE
-// ============================================================================
 // Cast en entier pour sécuriser les identifiants numériques
 $numArt = (int)$_POST['numArt'];      // ID de l'article
 $numMemb = (int)$_POST['numMemb'];    // ID du membre
@@ -56,9 +33,8 @@ $libCom = trim($_POST['libCom']);      // Contenu du commentaire (espaces suppri
 // URL de redirection après traitement (par défaut : liste des articles)
 $redirect = isset($_POST['redirect']) ? $_POST['redirect'] : '/views/frontend/articles.php';
 
-// ============================================================================
+
 // VALIDATION : VÉRIFICATION DE L'IDENTITÉ DE L'UTILISATEUR
-// ============================================================================
 // Sécurité : l'ID membre envoyé doit correspondre à l'utilisateur connecté
 // Empêche un utilisateur de poster un commentaire au nom d'un autre
 if($numMemb != $_SESSION['user_id']) {
@@ -71,9 +47,8 @@ if($numMemb != $_SESSION['user_id']) {
     exit;
 }
 
-// ============================================================================
+
 // VALIDATION : VÉRIFICATION DU CONTENU DU COMMENTAIRE
-// ============================================================================
 // Le commentaire ne doit pas être vide et ne doit pas dépasser 600 caractères
 if(empty($libCom) || strlen($libCom) > 600) {
     if ($isAjax) {
@@ -85,17 +60,13 @@ if(empty($libCom) || strlen($libCom) > 600) {
     exit;
 }
 
-// ============================================================================
 // SÉCURISATION DES DONNÉES AVANT INSERTION
-// ============================================================================
 // Protection contre les injections SQL et les attaques XSS :
 // - htmlspecialchars() : convertit les caractères spéciaux HTML en entités
 // - addslashes() : échappe les caractères spéciaux pour SQL
 $libCom = addslashes(htmlspecialchars($libCom, ENT_QUOTES, 'UTF-8'));
 
-// ============================================================================
 // INSERTION DU COMMENTAIRE EN BASE DE DONNÉES
-// ============================================================================
 // Colonnes de la table COMMENT à remplir
 $columns = 'libCom, numArt, numMemb, attModOK, delLogiq';
 
@@ -107,9 +78,7 @@ $values = "'$libCom', $numArt, $numMemb, 0, 0";
 // Appel de la fonction d'insertion SQL
 sql_insert('COMMENT', $columns, $values);
 
-// ============================================================================
 // RÉPONSE SELON LE TYPE DE REQUÊTE
-// ============================================================================
 if ($isAjax) {
     // Réponse JSON pour les requêtes AJAX (succès)
     echo json_encode([

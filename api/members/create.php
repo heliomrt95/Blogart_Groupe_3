@@ -13,9 +13,9 @@ $passMemb2 = $_POST['passMemb2'];
 $accordMemb = isset($_POST['accordMemb']) ? (int)$_POST['accordMemb'] : 0;
 $numStat = (int)$_POST['numStat'];
 
-// === VALIDATIONS ===
+// VALIDATIONS
 
-// 1. Validation PSEUDO (6-70 caractères, unique)
+// Validation PSEUDO (6-70 caractères, unique)
 if(strlen($pseudoMemb) < 6 || strlen($pseudoMemb) > 70) {
     echo "<script>alert('Le pseudo doit contenir entre 6 et 70 caractères.'); window.history.back();</script>";
     exit;
@@ -28,13 +28,13 @@ if($existingPseudo[0]['nb'] > 0) {
     exit;
 }
 
-// 2. Validation PRÉNOM et NOM (obligatoires)
+// Validation PRÉNOM et NOM (obligatoires)
 if(empty($prenomMemb) || empty($nomMemb)) {
     echo "<script>alert('Le prénom et le nom sont obligatoires.'); window.history.back();</script>";
     exit;
 }
 
-// 3. Validation EMAIL (format + identiques)
+// Validation EMAIL (format + identiques)
 if(!filter_var($eMailMemb, FILTER_VALIDATE_EMAIL)) {
     echo "<script>alert('L\'adresse email n\'est pas valide.'); window.history.back();</script>";
     exit;
@@ -45,7 +45,7 @@ if($eMailMemb !== $eMailMemb2) {
     exit;
 }
 
-// 4. Validation PASSWORD (8-15 car., maj+min+chiffre+spécial + identiques)
+// Validation PASSWORD (8-15 car., maj+min+chiffre+spécial + identiques)
 if($passMemb !== $passMemb2) {
     echo "<script>alert('Les deux mots de passe doivent être identiques.'); window.history.back();</script>";
     exit;
@@ -61,16 +61,16 @@ if(!preg_match($passRegex, $passMemb)) {
 // Cryptage du password
 $hashedPassword = password_hash($passMemb, PASSWORD_DEFAULT);
 
-// 5. Validation RGPD (doit être accepté)
+// Validation RGPD (doit être accepté)
 if($accordMemb != 1) {
     echo "<script>alert('Vous devez accepter la conservation de vos données personnelles pour créer un compte.'); window.history.back();</script>";
     exit;
 }
 
-// 6. Validation reCAPTCHA v3 (optionnel - à implémenter avec vos clés)
+// Validation reCAPTCHA v3 (optionnel - à implémenter avec vos clés)
 // TODO: Ajouter la vérification reCAPTCHA ici
 
-// === INSERTION EN BASE DE DONNÉES ===
+// INSERTION EN BASE DE DONNÉES
 $columns = 'pseudoMemb, prenomMemb, nomMemb, eMailMemb, passMemb, accordMemb, numStat';
 $values = "'$pseudoMemb', '$prenomMemb', '$nomMemb', '$eMailMemb', '$hashedPassword', $accordMemb, $numStat";
 
