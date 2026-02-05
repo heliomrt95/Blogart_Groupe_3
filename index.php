@@ -16,7 +16,7 @@ $articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
 
 
 
-<!-- HERO SECTION --><!-- HERO SECTION --><!-- HERO SECTION --><!-- HERO SECTION -->
+<!-- HERO SECTION -->
 <section class="hero-section d-flex align-items-center">
     <div class="container">
         <div class="hero-content">

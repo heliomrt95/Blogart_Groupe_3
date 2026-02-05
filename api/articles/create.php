@@ -57,14 +57,11 @@ if(isset($_FILES['urlPhotArt']) && $_FILES['urlPhotArt']['error'] == 0) {
 
 // ✅ INSERTION DE L'ARTICLE AVEC PDO
 try {
-    // Préparer la requête d'insertion
-    $query = "INSERT INTO ARTICLE 
-              (libTitrArt, libChapoArt, libAccrochArt, parag1Art, libSsTitr1Art, 
-               parag2Art, libSsTitr2Art, parag3Art, libConclArt, urlPhotArt, numThem) 
-              VALUES 
-              (:libTitrArt, :libChapoArt, :libAccrochArt, :parag1Art, :libSsTitr1Art, 
-               :parag2Art, :libSsTitr2Art, :parag3Art, :libConclArt, :urlPhotArt, :numThem)";
-    
+    sql_insert('ARTICLE', 
+        'libTitrArt, libChapoArt, libAccrochArt, parag1Art, libSsTitr1Art, parag2Art, libSsTitr2Art, parag3Art, libConclArt, urlPhotArt, numThem',
+        "???"
+    );
+
     $stmt = $DB->prepare($query);
     
     // Exécuter l'insertion
