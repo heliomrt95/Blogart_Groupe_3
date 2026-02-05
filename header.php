@@ -33,7 +33,7 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
 <body>
 
 <!-- NAVBAR BOOTSTRAP -->
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2F509E;">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2f509e;">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="/index.php">
             <img src="/src/images/logo.png" alt="LEKÉ" height="35" class="me-2">

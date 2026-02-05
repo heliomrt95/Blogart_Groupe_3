@@ -1,5 +1,5 @@
 <!-- FOOTER BOOTSTRAP - BLEU FONCÉ #2F509E - RESPONSIVE -->
-<footer class="text-white py-5" style="background-color: #2F509E;">
+<footer class="text-white py-5" style="background-color: #2f509e;">
     <div class="container">
         
         <!-- VERSION DESKTOP (>= 768px) -->
@@ -7,7 +7,9 @@
             
             <!-- Colonne 1 : Logo -->
             <div class="col-md-3">
-                <img src="/src/images/logo.png" alt="LEKÉ" height="100" class="me-2">
+                <a href="/index.php" aria-label="Accueil">
+                    <img src="/src/images/logo.png" alt="LEKÉ" height="175" class="me-2">
+                </a>
             </div>
             
             <!-- Colonne 2 : À propos -->
@@ -80,7 +82,9 @@
             
             <!-- Logo centré -->
             <div class="mb-4">
-                <img src="/src/images/logo.png" alt="LEKÉ";">
+                <a href="/index.php" aria-label="Accueil">
+                    <img src="/src/images/logo.png" alt="LEKÉ">
+                </a>
             </div>
             
             <!-- À propos -->
