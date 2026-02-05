@@ -31,7 +31,7 @@ if(!isset($_SESSION['user_statut_nom']) || $_SESSION['user_statut_nom'] !== 'Mod
         <div class="col-12">
             <div class="alert alert-success" role="alert">
                 <i class="fas fa-check-circle me-2"></i>
-                <strong>Bienvenue sur le dashboard !</strong> Vous êtes connecté en tant que <strong><?php echo htmlspecialchars($_SESSION['user_pseudo']); ?></strong>
+                <strong>Br le dashboard !</strong> Vous êtes connecté en tant que <strong><?php echo htmlspecialchars($_SESSION['user_pseudo']); ?></strong>
             </div>
         </div>
     </div>
