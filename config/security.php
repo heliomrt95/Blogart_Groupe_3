@@ -17,9 +17,7 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
     define('USER_ROLE', '');
 }
 
-/**
- * Fonction pour protéger une page (réserver aux utilisateurs connectés)
- */
+/* Fonction pour protéger une page (réserver aux utilisateurs connectés)*/
 function require_login() {
     if (!USER_IS_LOGGED_IN) {
         $_SESSION['login_error'] = "Vous devez être connecté pour accéder à cette page.";
@@ -28,9 +26,7 @@ function require_login() {
     }
 }
 
-/**
- * Fonction pour protéger une page (réserver aux modérateurs)
- */
+/* Fonction pour protéger une page (réserver aux modérateurs) */
 function require_moderator() {
     if (!USER_IS_LOGGED_IN || USER_ROLE !== 'Modérateur') {
         $_SESSION['login_error'] = "Accès réservé aux modérateurs.";
@@ -39,9 +35,8 @@ function require_moderator() {
     }
 }
 
-/**
- * Fonction pour échapper les sorties HTML (protection XSS)
- */
+/* Fonction pour échapper les sorties HTML (protection XSS)*/
+
 function escape($string) {
     return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
 }

@@ -1,14 +1,33 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
-require_once '../../functions/ctrlSaisies.php';
 
-$numCom = (int)$_POST['numCom'];
+// Récupérer et valider l'identifiant envoyé en POST
+$numCom = 0;
+if (isset($_POST['numCom'])) {
+	$numCom = (int) $_POST['numCom'];
+}
 
-// Mise à jour : suppression logique (delLogiq = 1)
-$update_data = "delLogiq = 1, dtDelLogCom = NOW()";
+if ($numCom <= 0) {
+	// id invalide -> retourner à la liste sans rien faire
+	header('Location: ../../views/backend/comments/list.php');
+	exit;
+}
 
-sql_update('COMMENT', $update_data, "numCom = $numCom");
+// Connexion PDO (utilise la variable globale $DB définie par config.php)
+global $DB;
+if (!$DB) {
+	sql_connect();
+}
 
-// Redirection
+try {
+	$stmt = $DB->prepare("UPDATE `COMMENT` SET delLogiq = 1, dtDelLogCom = NOW() WHERE numCom = :numCom");
+	$stmt->execute(['numCom' => $numCom]);
+} catch (PDOException $e) {
+	// Pour un débutant, on redirige simplement vers la liste (on pourrait logger l'erreur)
+	header('Location: ../../views/backend/comments/list.php');
+	exit;
+}
+
+// Redirection (succès)
 header('Location: ../../views/backend/comments/list.php');
 ?>
