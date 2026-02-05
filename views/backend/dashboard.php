@@ -15,7 +15,7 @@ if(!isset($_SESSION['user_statut_nom']) || $_SESSION['user_statut_nom'] !== 'Mod
 }
 ?>
 
-<!-- DASHBOARD ADMIN - 100% BOOTSTRAP -->
+<!-- DASHBOARD ADMIN -->
 <div class="container my-5">
     
     <!-- Titre principal -->
@@ -82,10 +82,10 @@ if(!isset($_SESSION['user_statut_nom']) || $_SESSION['user_statut_nom'] !== 'Mod
                                     <a href="/views/backend/members/create.php" class="btn btn-sm btn-success">
                                         <i class="fas fa-plus me-1"></i>Create
                                     </a>
-                                    <a href="/views/backend/members/edit.php" class="btn btn-sm btn-warning">
+                                    <a href="/views/backend/members/edit.php" class="btn btn-sm btn-warning" disabled>
                                         <i class="fas fa-edit me-1"></i>Edit
                                     </a>
-                                    <a href="/views/backend/members/delete.php" class="btn btn-sm btn-danger">
+                                    <a href="/views/backend/members/delete.php" class="btn btn-sm btn-danger" disabled>
                                         <i class="fas fa-trash me-1"></i>Delete
                                     </a>
                                 </div>
