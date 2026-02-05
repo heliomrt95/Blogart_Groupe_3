@@ -33,8 +33,8 @@ $membres = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
             </tr>
         </thead>
         <tbody>
-            <?php if(count($membres) > 0): ?>
-                <?php foreach($membres as $membre): ?>
+            <?php if(count($membres) > 0) { ?>
+                <?php foreach($membres as $membre) { ?>
                     <tr>
                         <td><?php echo $membre['numMemb']; ?></td>
                         <td><?php echo htmlspecialchars($membre['prenomMemb']); ?></td>
@@ -50,12 +50,12 @@ $membres = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
                                class="btn btn-outline-danger btn-sm">Delete</a>
                         </td>
                     </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
+                <?php } ?>
+            <?php } else { ?>
                 <tr>
                     <td colspan="8" class="text-center text-muted">Aucun membre</td>
                 </tr>
-            <?php endif; ?>
+            <?php } ?>
         </tbody>
     </table>
     

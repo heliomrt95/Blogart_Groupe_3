@@ -37,22 +37,22 @@ $articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
     <div class="container">
         <h2 class="mb-4">Dernières</h2>
         
-        <?php if(count($articles) >= 3): ?>
+    <?php if(count($articles) >= 3) { ?>
             <div class="articles-container">
                 
                 <!-- ARTICLE GAUCHE (grand) -->
                 <div class="article-left">
                     <?php $article = $articles[0]; ?>
                     
-                    <?php if(!empty($article['urlPhotArt'])): ?>
-                        <img src="/src/uploads/<?php echo htmlspecialchars($article['urlPhotArt']); ?>" 
-                             alt="<?php echo htmlspecialchars($article['libTitrArt']); ?>" 
-                             class="img-fluid">
-                    <?php else: ?>
-                        <img src="https://images.unsplash.com/photo-1590479773265-7464e5d48118?w=600" 
-                             alt="Article" 
-                             class="img-fluid">
-                    <?php endif; ?>
+                        <?php if(!empty($article['urlPhotArt'])) { ?>
+                            <img src="/src/uploads/<?php echo htmlspecialchars($article['urlPhotArt']); ?>" 
+                                 alt="<?php echo htmlspecialchars($article['libTitrArt']); ?>" 
+                                 class="img-fluid">
+                        <?php } else { ?>
+                            <img src="https://images.unsplash.com/photo-1590479773265-7464e5d48118?w=600" 
+                                 alt="Article" 
+                                 class="img-fluid">
+                        <?php } ?>
                     
                     <p class="meta mb-2">
                         By Rédaction LEKÉ | 
@@ -89,13 +89,13 @@ $articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
                     <?php $article = $articles[1]; ?>
                     <div class="article-right-item">
                         <div class="article-right-top">
-                            <?php if(!empty($article['urlPhotArt'])): ?>
+                            <?php if(!empty($article['urlPhotArt'])) { ?>
                                 <img src="/src/uploads/<?php echo htmlspecialchars($article['urlPhotArt']); ?>" 
                                      alt="<?php echo htmlspecialchars($article['libTitrArt']); ?>">
-                            <?php else: ?>
+                            <?php } else { ?>
                                 <img src="https://images.unsplash.com/photo-1581625875212-c59bb6d69148?w=300" 
                                      alt="Article">
-                            <?php endif; ?>
+                            <?php } ?>
                             
                             <div class="article-right-header">
                                 <p class="meta mb-2">
@@ -132,13 +132,13 @@ $articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
                     <?php $article = $articles[2]; ?>
                     <div class="article-right-item">
                         <div class="article-right-top">
-                            <?php if(!empty($article['urlPhotArt'])): ?>
+                            <?php if(!empty($article['urlPhotArt'])) { ?>
                                 <img src="/src/uploads/<?php echo htmlspecialchars($article['urlPhotArt']); ?>" 
                                      alt="<?php echo htmlspecialchars($article['libTitrArt']); ?>">
-                            <?php else: ?>
+                            <?php } else { ?>
                                 <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=300" 
                                      alt="Article">
-                            <?php endif; ?>
+                            <?php } ?>
                             
                             <div class="article-right-header">
                                 <p class="meta mb-2">
@@ -174,17 +174,17 @@ $articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
             
-        <?php elseif(count($articles) > 0): ?>
+    <?php } elseif(count($articles) > 0) { ?>
             <div class="alert alert-info">
                 Il y a <?php echo count($articles); ?> article(s) dans la base. Il en faut au moins 3 pour afficher cette section.
                 <a href="/views/backend/articles/create.php" class="alert-link">Créer plus d'articles</a>
             </div>
-        <?php else: ?>
+    <?php } else { ?>
             <div class="alert alert-warning">
                 Aucun article pour le moment. 
                 <a href="/views/backend/articles/create.php" class="alert-link">Créer votre premier article</a>
             </div>
-        <?php endif; ?>
+    <?php } ?>
     </div>
 </section>
 
@@ -194,7 +194,7 @@ $articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
         <h2 class="mb-4">Notre équipe</h2>
         
         <div class="team-grid">
-            <!-- Membre 1 - Tom WILLIOT -->
+            <!-- Membre 1 -->
             <div class="team-member">
                 <div class="team-avatar">
                     <img src="/src/images/equipe/tom.jpg" alt="Tom WILLIOT">
@@ -204,7 +204,7 @@ $articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
                 <p class="team-description">Rédacteur en chef</p>
             </div>
             
-            <!-- Membre 2 - Remi SOULARD -->
+            <!-- Membre 2 -->
             <div class="team-member">
                 <div class="team-avatar">
                     <img src="/src/images/equipe/remi.jpg" alt="Remi SOULARD">
@@ -214,7 +214,7 @@ $articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
                 <p class="team-description">Rédacteur adjoint</p>
             </div>
             
-            <!-- Membre 3 - Helio MARTONE -->
+            <!-- Membre 3 -->
             <div class="team-member">
                 <div class="team-avatar">
                     <img src="/src/images/equipe/helio.jpg" alt="Helio MARTONE">
@@ -224,7 +224,7 @@ $articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
                 <p class="team-description">Directeur des opérations de développement</p>
             </div>
             
-            <!-- Membre 4 - Khalid LOTF -->
+            <!-- Membre 4 -->
             <div class="team-member">
                 <div class="team-avatar">
                     <img src="/src/images/equipe/khalid.jpg" alt="Khalid LOTF">

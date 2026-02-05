@@ -111,12 +111,13 @@ $statuts = sql_select("STATUT", "*");
         <div class="mb-3">
             <label for="numStat" class="form-label">Statut</label>
             <select id="numStat" name="numStat" class="form-control" required>
-                <?php foreach($statuts as $statut): ?>
-                    <option value="<?php echo $statut['numStat']; ?>" 
-                            <?php echo ($membre['numStat'] == $statut['numStat']) ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($statut['libStat']); ?>
+                <?php foreach($statuts as $statut) { ?>
+                    <?php $optVal = $statut['numStat']; ?>
+                    <?php $optLabel = htmlspecialchars($statut['libStat']); ?>
+                    <option value="<?php echo $optVal; ?>" <?php echo ($membre['numStat'] == $optVal) ? 'selected' : ''; ?>>
+                        <?php echo $optLabel; ?>
                     </option>
-                <?php endforeach; ?>
+                <?php } ?>
             </select>
         </div>
         

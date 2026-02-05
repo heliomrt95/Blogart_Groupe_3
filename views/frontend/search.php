@@ -67,58 +67,58 @@ if (!empty($searchQuery)) {
             </form>
             
             <!-- Si une requête de recherche est présente, afficher le récapitulatif et les résultats -->
-            <?php if (!empty($searchQuery)): ?>
-                
+            <?php if (!empty($searchQuery)) { ?>
+
                 <!-- En-tête indiquant le nombre de résultats pour la recherche -->
                 <div class="mb-4">
                     <h2 class="h4 fw-bold mb-4">
-                        <?php if (count($results) > 0): ?>
+                        <?php if (count($results) > 0) { ?>
                             <?php echo count($results); ?> résultat<?php echo count($results) > 1 ? 's' : ''; ?> 
                             pour "<?php echo htmlspecialchars($searchQuery); ?>"
-                        <?php else: ?>
+                        <?php } else { ?>
                             Aucun résultat pour "<?php echo htmlspecialchars($searchQuery); ?>"
-                        <?php endif; ?>
+                        <?php } ?>
                     </h2>
                 </div>
-                
-                <?php if (count($results) > 0): ?>
+
+                <?php if (count($results) > 0) { ?>
                     <div class="row g-4">
-                        <?php foreach ($results as $article): ?>
+                        <?php foreach ($results as $article) { ?>
                             <div class="col-12">
                                 <div class="card border-0" style="background-color: #f8f9fa;">
                                     <div class="card-body p-4">
                                         <div class="row align-items-center">
                                             <?php // Affiche la vignette de l'article si une image est renseignée ?>
-                                            <?php if (!empty($article['urlPhotArt'])): ?>
+                                            <?php if (!empty($article['urlPhotArt'])) { ?>
                                                 <div class="col-md-3">
                                                     <img src="/src/uploads/<?php echo htmlspecialchars($article['urlPhotArt']); ?>" 
                                                          class="img-fluid rounded" 
                                                          alt="<?php echo htmlspecialchars($article['libTitrArt']); ?>"
                                                          style="height: 120px; width: 100%; object-fit: cover;">
                                                 </div>
-                                            <?php endif; ?>
-                                            
+                                            <?php } ?>
+
                                             <div class="<?php echo !empty($article['urlPhotArt']) ? 'col-md-9' : 'col-12'; ?>">
                                                 <div class="d-flex align-items-center gap-2 mb-2">
                                                     <?php // Affiche la thématique si disponible ?>
-                                                    <?php if (!empty($article['libThem'])): ?>
+                                                    <?php if (!empty($article['libThem'])) { ?>
                                                         <span class="badge" style="background-color: #2F509E;">
                                                             <?php echo htmlspecialchars($article['libThem']); ?>
                                                         </span>
-                                                    <?php endif; ?>
+                                                    <?php } ?>
                                                     <?php // Affiche la date de création formatée en JJ/MM/AAAA ?>
                                                     <span class="text-muted small">
                                                         <?php echo date('d/m/Y', strtotime($article['dtCreaArt'])); ?>
                                                     </span>
                                                 </div>
-                                                
+
                                                 <h3 class="h5 fw-bold mb-2">
                                                     <a href="/views/frontend/article.php?id=<?php echo $article['numArt']; ?>" 
                                                        class="text-decoration-none text-dark">
                                                         <?php echo htmlspecialchars($article['libTitrArt']); ?>
                                                     </a>
                                                 </h3>
-                                                
+
                                                 <?php // Extrait (chapo) : suppression des balises HTML puis troncature à 150 caractères ?>
                                                 <p class="text-muted mb-3">
                                                     <?php 
@@ -126,7 +126,7 @@ if (!empty($searchQuery)) {
                                                     echo htmlspecialchars(substr($excerpt, 0, 150)) . '...'; 
                                                     ?>
                                                 </p>
-                                                
+
                                                 <a href="/views/frontend/article.php?id=<?php echo $article['numArt']; ?>" 
                                                    class="btn btn-sm" style="background-color: #2F509E; color: white;">
                                                     Lire l'article
@@ -136,10 +136,10 @@ if (!empty($searchQuery)) {
                                     </div>
                                 </div>
                             </div>
-                        <?php endforeach; ?>
+                        <?php } ?>
                     </div>
-                    
-                <?php else: ?>
+
+                <?php } else { ?>
                     <!-- Message affiché si la recherche n'a retourné aucun résultat -->
                     <div class="alert alert-info">
                         <i class="bi bi-info-circle-fill me-2"></i>
@@ -149,9 +149,9 @@ if (!empty($searchQuery)) {
                             <a href="/views/frontend/articles.php" style="color: #2F509E;">articles disponibles</a>.
                         </p>
                     </div>
-                <?php endif; ?>
-                
-            <?php else: ?>
+                <?php } ?>
+
+            <?php } else { ?>
                 <!-- Pas de recherche saisie : affichage de suggestions thématiques cliquables -->
                 <div class="row g-4">
                     <div class="col-md-4">

@@ -62,20 +62,20 @@ if ($articleId > 0) {
 }
 ?>
 
-<?php if ($article): ?>
+<?php if ($article) { ?>
 
 <!-- PAGE ARTICLE DÉTAIL -->
 <section class="page-article-detail">
     <div class="container-fluid px-0">
         <!-- Image Hero -->
         <div class="article-hero">
-            <?php if(!empty($article['urlPhotArt'])): ?>
+            <?php if(!empty($article['urlPhotArt'])) { ?>
                 <img src="/src/uploads/<?php echo htmlspecialchars($article['urlPhotArt']); ?>" 
                      class="img-fluid w-100" alt="<?php echo htmlspecialchars($article['libTitrArt']); ?>">
-            <?php else: ?>
+            <?php } else { ?>
                 <img src="https://images.unsplash.com/photo-1590479773265-7464e5d48118?w=1600" 
                      class="img-fluid w-100" alt="Article">
-            <?php endif; ?>
+            <?php } ?>
             
             <!-- Bouton retour -->
             <a href="/views/frontend/articles.php" class="btn-retour">
@@ -116,48 +116,48 @@ if ($articleId > 0) {
                     
                     <!-- Corps -->
                     <div class="article-body">
-                        <?php if (!empty($article['libAccrochArt'])): ?>
+                        <?php if (!empty($article['libAccrochArt'])) { ?>
                         <h2><?php echo nl2br(bbcode_to_html($article['libAccrochArt'])); ?></h2>
-                        <?php endif; ?>
+                        <?php } ?>
                         
-                        <?php if (!empty($article['parag1Art'])): ?>
+                        <?php if (!empty($article['parag1Art'])) { ?>
                         <p><?php echo nl2br(bbcode_to_html($article['parag1Art'])); ?></p>
-                        <?php endif; ?>
+                        <?php } ?>
                         
-                        <?php if (!empty($article['libSsTitr1Art'])): ?>
+                        <?php if (!empty($article['libSsTitr1Art'])) { ?>
                         <h2><?php echo nl2br(bbcode_to_html($article['libSsTitr1Art'])); ?></h2>
-                        <?php endif; ?>
+                        <?php } ?>
                         
-                        <?php if (!empty($article['parag2Art'])): ?>
+                        <?php if (!empty($article['parag2Art'])) { ?>
                         <p><?php echo nl2br(bbcode_to_html($article['parag2Art'])); ?></p>
-                        <?php endif; ?>
+                        <?php } ?>
                         
-                        <?php if (!empty($article['libSsTitr2Art'])): ?>
+                        <?php if (!empty($article['libSsTitr2Art'])) { ?>
                         <h2><?php echo nl2br(bbcode_to_html($article['libSsTitr2Art'])); ?></h2>
-                        <?php endif; ?>
+                        <?php } ?>
                         
-                        <?php if (!empty($article['parag3Art'])): ?>
+                        <?php if (!empty($article['parag3Art'])) { ?>
                         <p><?php echo nl2br(bbcode_to_html($article['parag3Art'])); ?></p>
-                        <?php endif; ?>
+                        <?php } ?>
                         
-                        <?php if (!empty($article['libConclArt'])): ?>
+                        <?php if (!empty($article['libConclArt'])) { ?>
                         <p><strong><?php echo nl2br(bbcode_to_html($article['libConclArt'])); ?></strong></p>
-                        <?php endif; ?>
+                        <?php } ?>
                     </div>
                     
                     <!-- Tags -->
-                    <?php if (count($tags) > 0): ?>
+                    <?php if (count($tags) > 0) { ?>
                     <div class="article-tags mt-4 pt-4 border-top">
-                        <?php foreach ($tags as $tag): ?>
+                        <?php foreach ($tags as $tag) { ?>
                             <span class="tag"><?php echo htmlspecialchars($tag['libMotCle']); ?></span>
-                        <?php endforeach; ?>
+                        <?php } ?>
                     </div>
-                    <?php endif; ?>
+                    <?php } ?>
                     
                     <!-- LIKES -->
                     <div class="article-likes mt-4 py-4 border-top border-bottom">
                         <div class="d-flex align-items-center gap-3">
-                            <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
+                            <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) { ?>
                                 <button type="button" 
                                         class="btn btn-like" 
                                         id="likeBtn"
@@ -170,12 +170,12 @@ if ($articleId > 0) {
                                     <i class="bi <?php echo $userHasLiked ? 'bi-heart-fill' : 'bi-heart'; ?> me-2"></i>
                                     <span id="likeText"><?php echo $userHasLiked ? 'J\'aime' : 'Aimer'; ?></span>
                                 </button>
-                            <?php else: ?>
+                            <?php } else { ?>
                                 <a href="/views/backend/security/login.php" class="btn" style="background-color: #f8f9fa; color: #6c757d; border: 2px solid #dee2e6;">
                                     <i class="bi bi-heart me-2"></i>
                                     Connectez-vous pour aimer
                                 </a>
-                            <?php endif; ?>
+                            <?php } ?>
                             
                             <span class="text-muted">
                                 <strong id="likeCount"><?php echo $totalLikes; ?></strong> 
@@ -193,7 +193,7 @@ if ($articleId > 0) {
                         <div id="commentMessages"></div>
                         
                         <!-- Formulaire -->
-                        <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
+                        <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) { ?>
                             <div class="card mb-4" style="border: 2px solid #f8f9fa;">
                                 <div class="card-body">
                                     <h5 class="card-title fw-semibold mb-3">Ajouter un commentaire</h5>
@@ -217,17 +217,17 @@ if ($articleId > 0) {
                                     </form>
                                 </div>
                             </div>
-                        <?php else: ?>
+                        <?php } else { ?>
                             <div class="alert alert-info">
                                 <i class="bi bi-info-circle-fill me-2"></i>
                                 <a href="/views/backend/security/login.php">Connectez-vous</a> pour commenter.
                             </div>
-                        <?php endif; ?>
+                        <?php } ?>
                         
                         <!-- Liste -->
                         <div id="commentsList">
-                            <?php if (count($comments) > 0): ?>
-                                <?php foreach ($comments as $comment): ?>
+                <?php if (count($comments) > 0) { ?>
+                    <?php foreach ($comments as $comment) { ?>
                                     <div class="card mb-3" style="background-color: #f8f9fa;">
                                         <div class="card-body">
                                             <div class="d-flex align-items-start">
@@ -248,13 +248,13 @@ if ($articleId > 0) {
                                             </div>
                                         </div>
                                     </div>
-                                <?php endforeach; ?>
-                            <?php else: ?>
+                                <?php } ?>
+                            <?php } else { ?>
                                 <div class="alert alert-secondary">
                                     <i class="bi bi-chat-dots-fill me-2"></i>
                                     Aucun commentaire. Soyez le premier !
                                 </div>
-                            <?php endif; ?>
+                            <?php } ?>
                         </div>
                     </div>
                     
@@ -379,13 +379,13 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<?php else: ?>
+<?php } else { ?>
     <div class="container py-5">
         <div class="alert alert-warning">Article introuvable.</div>
         <a href="/views/frontend/articles.php" class="btn btn-primary" style="background-color: #2F509E;">
             Retour aux articles
         </a>
     </div>
-<?php endif; ?>
+<?php } ?>
 
 <?php require_once '../../footer.php'; ?>

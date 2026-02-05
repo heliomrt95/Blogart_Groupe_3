@@ -23,21 +23,21 @@ $articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
 <div class="container py-5">
     
     <!-- Messages de succès/erreur -->
-    <?php if (isset($_GET['success']) && $_GET['success'] == 'deleted'): ?>
+    <?php if (isset($_GET['success']) && $_GET['success'] == 'deleted') { ?>
         <div class="alert alert-success alert-dismissible fade show">
             <i class="bi bi-check-circle-fill me-2"></i>
             Article supprimé avec succès !
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
-    <?php endif; ?>
+    <?php } ?>
     
-    <?php if (isset($_GET['error'])): ?>
+    <?php if (isset($_GET['error'])) { ?>
         <div class="alert alert-danger alert-dismissible fade show">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
             Erreur : <?php echo htmlspecialchars($_GET['error']); ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
-    <?php endif; ?>
+    <?php } ?>
     
     <!-- En-tête -->
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -48,7 +48,7 @@ $articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
     </div>
     
     <!-- Liste des articles -->
-    <?php if (count($articles) > 0): ?>
+    <?php if (count($articles) > 0) { ?>
         <div class="card">
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -64,19 +64,19 @@ $articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach($articles as $article): ?>
+                            <?php foreach($articles as $article) { ?>
                                 <tr>
                                     <!-- Image -->
                                     <td>
-                                        <?php if (!empty($article['urlPhotArt'])): ?>
+                                        <?php if (!empty($article['urlPhotArt'])) { ?>
                                             <img src="/src/uploads/<?php echo htmlspecialchars($article['urlPhotArt']); ?>" 
                                                  alt="<?php echo htmlspecialchars($article['libTitrArt']); ?>"
                                                  style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
-                                        <?php else: ?>
+                                        <?php } else { ?>
                                             <div style="width: 60px; height: 60px; background: #e9ecef; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
                                                 <i class="bi bi-image text-muted"></i>
                                             </div>
-                                        <?php endif; ?>
+                                        <?php } ?>
                                     </td>
                                     
                                     <!-- Titre -->
@@ -93,11 +93,11 @@ $articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
                                     
                                     <!-- Thématique -->
                                     <td>
-                                        <?php if (!empty($article['libThem'])): ?>
+                                        <?php if (!empty($article['libThem'])) { ?>
                                             <span class="badge bg-secondary"><?php echo htmlspecialchars($article['libThem']); ?></span>
-                                        <?php else: ?>
+                                        <?php } else { ?>
                                             <span class="text-muted">N/A</span>
-                                        <?php endif; ?>
+                                        <?php } ?>
                                     </td>
                                     
                                     <!-- Date -->
@@ -128,14 +128,14 @@ $articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
                                             <!-- Supprimer -->
                                             <a href="/api/articles/delete.php?id=<?php echo $article['numArt']; ?>" 
                                                class="btn btn-sm btn-outline-danger"
-                                               onclick="return confirm('⚠️ Voulez-vous vraiment supprimer cet article ?\n\nTous les éléments associés seront également supprimés :\n✗ Commentaires\n✗ Likes\n✗ Mots-clés\n✗ Image\n\nCette action est irréversible.');"
+                                               onclick="return confirm('Voulez-vous vraiment supprimer cet article ?\n\nTous les éléments associés seront également supprimés :\n✗ Commentaires\n✗ Likes\n✗ Mots-clés\n✗ Image\n\nCette action est irréversible.');"
                                                title="Supprimer">
                                                 <i class="bi bi-trash"></i>
                                             </a>
                                         </div>
                                     </td>
                                 </tr>
-                            <?php endforeach; ?>
+                            <?php } ?>
                         </tbody>
                     </table>
                 </div>
@@ -148,14 +148,14 @@ $articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
             Total : <strong><?php echo count($articles); ?></strong> article(s)
         </div>
         
-    <?php else: ?>
+    <?php } else { ?>
         <!-- Aucun article -->
         <div class="alert alert-warning">
             <i class="bi bi-exclamation-triangle me-2"></i>
             Aucun article pour le moment.
             <a href="create.php" class="alert-link">Créer le premier article</a>
         </div>
-    <?php endif; ?>
+    <?php } ?>
     
 </div>
 

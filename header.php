@@ -54,7 +54,7 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
                        href="/views/frontend/articles.php">Articles</a>
                 </li>
                 
-                <!-- ✅ BARRE DE RECHERCHE -->
+                <!-- BARRE DE RECHERCHE -->
                 <li class="nav-item d-none d-lg-block ms-3">
                     <form action="/views/frontend/search.php" method="GET" class="d-flex">
                         <div class="input-group input-group-sm">
@@ -70,31 +70,31 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
                     </form>
                 </li>
                 
-                <?php if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
+                <?php if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) { ?>
                     
-                    <?php if(isset($_SESSION['user_statut_nom']) && $_SESSION['user_statut_nom'] === 'Modérateur'): ?>
+                    <?php if(isset($_SESSION['user_statut_nom']) && $_SESSION['user_statut_nom'] === 'Modérateur') { ?>
                         <li class="nav-item">
                             <a class="nav-link" href="/views/backend/dashboard.php">Admin</a>
                         </li>
-                    <?php endif; ?>
+                    <?php } ?>
                     
                     <li class="nav-item">
                         <a class="nav-link" href="/api/security/disconnect.php">
                             Déconnexion (<?php echo htmlspecialchars($_SESSION['user_pseudo']); ?>)
                         </a>
                     </li>
-                <?php else: ?>
+                <?php } else { ?>
                     <li class="nav-item">
                         <a class="nav-link <?php echo ($current_page == 'login') ? 'fw-bold' : ''; ?>" 
                            href="/views/backend/security/login.php">Connexion</a>
                     </li>
-                <?php endif; ?>
+                <?php } ?>
             </ul>
         </div>
     </div>
 </nav>
 
-<!-- ✅ BARRE DE RECHERCHE MOBILE (en dessous de la navbar sur petit écran) -->
+<!-- BARRE DE RECHERCHE MOBILE (en dessous de la navbar sur petit écran) -->
 <div class="d-lg-none bg-light border-bottom py-2">
     <div class="container">
         <form action="/views/frontend/search.php" method="GET">

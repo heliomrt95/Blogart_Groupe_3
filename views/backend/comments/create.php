@@ -101,9 +101,9 @@ $motscles = sql_select("MOTCLE", "*", "", "libMotCle ASC");
                         Sélectionnez un ou plusieurs mots-clés pour cet article
                     </small>
                     
-                    <?php if (count($motscles) > 0): ?>
+                    <?php if (count($motscles) > 0) { ?>
                         <div class="row">
-                            <?php foreach($motscles as $motcle): ?>
+                            <?php foreach($motscles as $motcle) { ?>
                                 <div class="col-md-3 col-sm-4 col-6 mb-2">
                                     <div class="form-check">
                                         <input class="form-check-input" 
@@ -116,14 +116,14 @@ $motscles = sql_select("MOTCLE", "*", "", "libMotCle ASC");
                                         </label>
                                     </div>
                                 </div>
-                            <?php endforeach; ?>
+                            <?php } ?>
                         </div>
-                    <?php else: ?>
+                    <?php } else { ?>
                         <div class="alert alert-warning">
                             <i class="bi bi-exclamation-triangle me-2"></i>
                             Aucun mot-clé disponible. Créez-en d'abord dans la gestion des mots-clés.
                         </div>
-                    <?php endif; ?>
+                    <?php } ?>
                 </div>
 
                 <!-- Upload Image -->

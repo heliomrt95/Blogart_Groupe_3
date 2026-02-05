@@ -17,21 +17,21 @@ $articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
     <div class="container">
         <h1 class="page-title">Articles</h1>
         
-        <?php if(count($articles) > 0): ?>
+        <?php if(count($articles) > 0) { ?>
             <div class="articles-list">
-                <?php foreach($articles as $article): ?>
+                <?php foreach($articles as $article) { ?>
                     <article class="article-item">
                         <div class="row">
                             <!-- Image à gauche (Bootstrap col) -->
                             <div class="col-lg-5">
                                 <div class="article-item-image">
-                                    <?php if(!empty($article['urlPhotArt'])): ?>
+                                    <?php if(!empty($article['urlPhotArt'])) { ?>
                                         <img src="/src/uploads/<?php echo $article['urlPhotArt']; ?>" 
                                              class="img-fluid" alt="Article">
-                                    <?php else: ?>
+                                    <?php } else { ?>
                                         <img src="https://images.unsplash.com/photo-1590479773265-7464e5d48118?w=600" 
                                              class="img-fluid" alt="Article">
-                                    <?php endif; ?>
+                                    <?php } ?>
                                 </div>
                             </div>
                             
@@ -60,13 +60,13 @@ $articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                         </div>
                     </article>
-                <?php endforeach; ?>
+                <?php } ?>
             </div>
-        <?php else: ?>
+        <?php } else { ?>
             <div class="alert alert-info">
                 Aucun article disponible pour le moment.
             </div>
-        <?php endif; ?>
+        <?php } ?>
     </div>
 </section>
 

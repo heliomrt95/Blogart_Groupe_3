@@ -95,16 +95,16 @@ $motscles = $DB->query("SELECT * FROM MOTCLE ORDER BY libMotCle ASC")->fetchAll(
                     </select>
                 </div>
 
-                <!-- ✅ MOTS-CLÉS (Checkboxes) -->
+                <!-- MOTS-CLÉS (Checkboxes) -->
                 <div class="form-group mb-3">
                     <label class="form-label fw-semibold">Mots-clés</label>
                     <small class="form-text text-muted d-block mb-3">
                         Sélectionnez un ou plusieurs mots-clés pour cet article
                     </small>
                     
-                    <?php if (count($motscles) > 0): ?>
+                    <?php if (count($motscles) > 0) { ?>
                         <div class="row">
-                            <?php foreach($motscles as $motcle): ?>
+                            <?php foreach($motscles as $motcle) { ?>
                                 <div class="col-md-3 col-sm-4 col-6 mb-2">
                                     <div class="form-check">
                                         <input class="form-check-input" 
@@ -117,15 +117,16 @@ $motscles = $DB->query("SELECT * FROM MOTCLE ORDER BY libMotCle ASC")->fetchAll(
                                         </label>
                                     </div>
                                 </div>
-                            <?php endforeach; ?>
+                            <?php } ?>
                         </div>
-                    <?php else: ?>
+                    <?php } 
+else { ?>
                         <div class="alert alert-warning">
                             <i class="bi bi-exclamation-triangle me-2"></i>
                             Aucun mot-clé disponible. 
                             <a href="/views/backend/keywords/create.php" class="alert-link">Créer des mots-clés</a>
                         </div>
-                    <?php endif; ?>
+                    <?php } ?>
                 </div>
 
                 <!-- Upload Image -->

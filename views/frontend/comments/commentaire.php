@@ -87,8 +87,8 @@ $comments = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
             <h3>Commentaires (<?php echo count($comments); ?>)</h3>
         </div>
         <div class="card-body">
-            <?php if(count($comments) > 0): ?>
-                <?php foreach($comments as $comment): ?>
+            <?php if(count($comments) > 0) { ?>
+                <?php foreach($comments as $comment) { ?>
                     <div class="border-bottom pb-3 mb-3">
                         <div class="d-flex justify-content-between">
                             <strong><?php echo htmlspecialchars($comment['pseudoMemb']); ?></strong>
@@ -96,10 +96,10 @@ $comments = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <p><?php echo nl2br(htmlspecialchars($comment['libCom'])); ?></p>
                     </div>
-                <?php endforeach; ?>
-            <?php else: ?>
+                <?php } ?>
+            <?php } else { ?>
                 <p class="text-muted">Aucun commentaire. Soyez le premier !</p>
-            <?php endif; ?>
+            <?php } ?>
         </div>
     </div>
 </div>
