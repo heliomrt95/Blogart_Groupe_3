@@ -3,7 +3,10 @@ require_once '../../header.php';
 sql_connect();
 
 // Récupérer l'ID de l'article
-$articleId = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$articleId = 0;
+if (isset($_GET['id'])) {
+    $articleId = intval($_GET['id']);
+}
 
 if ($articleId > 0) {
     // Charger l'article
@@ -57,9 +60,35 @@ if ($articleId > 0) {
     $stmtComments->execute(['id' => $articleId]);
     $comments = $stmtComments->fetchAll(PDO::FETCH_ASSOC);
     
-} else {
-    $article = null;
-}
+    } else {
+        $article = null;
+    }
+
+    // Préparer des variables pour l'affichage (évite les opérateurs ternaires inline)
+    // Ces variables seront utilisées dans le template ci-dessous.
+    if ($article) {
+        $dataLiked = '0';
+        $likeBg = '#f8f9fa';
+        $likeColor = '#6c757d';
+        $likeBorder = '#dee2e6';
+        $likeIcon = 'bi-heart';
+        $likeText = 'Aimer';
+
+        if (isset($userHasLiked) && $userHasLiked) {
+            $dataLiked = '1';
+            $likeBg = '#2F509E';
+            $likeColor = 'white';
+            $likeBorder = '#2F509E';
+            $likeIcon = 'bi-heart-fill';
+            $likeText = 'J\'aime';
+        }
+
+        if (isset($totalLikes) && $totalLikes > 1) {
+            $likeLabel = 'personnes aiment cet article';
+        } else {
+            $likeLabel = 'personne aime cet article';
+        }
+    }
 ?>
 
 <?php if ($article) { ?>
@@ -163,12 +192,12 @@ if ($articleId > 0) {
                                         id="likeBtn"
                                         data-article-id="<?php echo $articleId; ?>"
                                         data-user-id="<?php echo $_SESSION['user_id']; ?>"
-                                        data-liked="<?php echo $userHasLiked ? '1' : '0'; ?>"
-                                        style="background-color: <?php echo $userHasLiked ? '#2F509E' : '#f8f9fa'; ?>; 
-                                               color: <?php echo $userHasLiked ? 'white' : '#6c757d'; ?>; 
-                                               border: 2px solid <?php echo $userHasLiked ? '#2F509E' : '#dee2e6'; ?>;">
-                                    <i class="bi <?php echo $userHasLiked ? 'bi-heart-fill' : 'bi-heart'; ?> me-2"></i>
-                                    <span id="likeText"><?php echo $userHasLiked ? 'J\'aime' : 'Aimer'; ?></span>
+                         data-liked="<?php echo $dataLiked; ?>"
+                         style="background-color: <?php echo $likeBg; ?>; 
+                             color: <?php echo $likeColor; ?>; 
+                             border: 2px solid <?php echo $likeBorder; ?>;">
+                     <i class="bi <?php echo $likeIcon; ?> me-2"></i>
+                     <span id="likeText"><?php echo $likeText; ?></span>
                                 </button>
                             <?php } else { ?>
                                 <a href="/views/backend/security/login.php" class="btn" style="background-color: #f8f9fa; color: #6c757d; border: 2px solid #dee2e6;">
@@ -179,7 +208,7 @@ if ($articleId > 0) {
                             
                             <span class="text-muted">
                                 <strong id="likeCount"><?php echo $totalLikes; ?></strong> 
-                                <span id="likeLabel"><?php echo $totalLikes > 1 ? 'personnes aiment cet article' : 'personne aime cet article'; ?></span>
+                                <span id="likeLabel"><?php echo $likeLabel; ?></span>
                             </span>
                         </div>
                     </div>

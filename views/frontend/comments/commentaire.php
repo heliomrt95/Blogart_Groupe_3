@@ -10,7 +10,10 @@ if(!isset($_SESSION['user_id'])) {
 }
 
 // Récupérer l'article depuis l'URL
-$numArt = isset($_GET['numArt']) ? (int)$_GET['numArt'] : 0;
+$numArt = 0;
+if (isset($_GET['numArt'])) {
+    $numArt = (int) $_GET['numArt'];
+}
 
 if($numArt == 0) {
     echo "<div class='alert alert-danger'>Article introuvable.</div>";
