@@ -3,6 +3,10 @@ include '../../../header.php';
 
 // Charger toutes les thématiques pour la listbox
 $thematiques = sql_select("THEMATIQUE", "*");
+
+// Charger tous les mots-clés existants (avec requête directe)
+global $DB;
+$motscles = $DB->query("SELECT * FROM MOTCLE ORDER BY libMotCle ASC")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!-- Bootstrap form to create a new article -->
@@ -91,16 +95,37 @@ $thematiques = sql_select("THEMATIQUE", "*");
                     </select>
                 </div>
 
-                <!-- ✅ NOUVEAU : Mots-clés -->
+                <!-- ✅ MOTS-CLÉS (Checkboxes) -->
                 <div class="form-group mb-3">
-                    <label for="motscles">Mots-clés</label>
-                    <input id="motscles" 
-                           name="motscles" 
-                           class="form-control" 
-                           type="text" 
-                           maxlength="60" 
-                           placeholder="quais, bordeaux, garonne, histoire" />
-                    <small class="form-text text-muted">Maximum 60 caractères. Séparez les mots-clés par des virgules.</small>
+                    <label class="form-label fw-semibold">Mots-clés</label>
+                    <small class="form-text text-muted d-block mb-3">
+                        Sélectionnez un ou plusieurs mots-clés pour cet article
+                    </small>
+                    
+                    <?php if (count($motscles) > 0): ?>
+                        <div class="row">
+                            <?php foreach($motscles as $motcle): ?>
+                                <div class="col-md-3 col-sm-4 col-6 mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" 
+                                               type="checkbox" 
+                                               name="motscles[]" 
+                                               value="<?php echo $motcle['numMotCle']; ?>" 
+                                               id="motcle_<?php echo $motcle['numMotCle']; ?>">
+                                        <label class="form-check-label" for="motcle_<?php echo $motcle['numMotCle']; ?>">
+                                            <?php echo htmlspecialchars($motcle['libMotCle']); ?>
+                                        </label>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php else: ?>
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Aucun mot-clé disponible. 
+                            <a href="/views/backend/keywords/create.php" class="alert-link">Créer des mots-clés</a>
+                        </div>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Upload Image -->

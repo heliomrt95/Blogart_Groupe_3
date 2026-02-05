@@ -96,7 +96,7 @@ if ($articleId > 0) {
                     
                     <!-- Chapô -->
                     <p class="article-detail-chapo">
-                        <?php echo nl2br(htmlspecialchars($article['libChapoArt'])); ?>
+                        <?php echo nl2br(make_links_clickable($article['libChapoArt'])); ?>
                     </p>
                     
                     <!-- Meta auteur -->
@@ -117,31 +117,31 @@ if ($articleId > 0) {
                     <!-- Corps -->
                     <div class="article-body">
                         <?php if (!empty($article['libAccrochArt'])): ?>
-                        <h2><?php echo nl2br(htmlspecialchars($article['libAccrochArt'])); ?></h2>
+                        <h2><?php echo nl2br(make_links_clickable($article['libAccrochArt'])); ?></h2>
                         <?php endif; ?>
                         
                         <?php if (!empty($article['parag1Art'])): ?>
-                        <p><?php echo nl2br(htmlspecialchars($article['parag1Art'])); ?></p>
+                        <p><?php echo nl2br(make_links_clickable($article['parag1Art'])); ?></p>
                         <?php endif; ?>
                         
                         <?php if (!empty($article['libSsTitr1Art'])): ?>
-                        <h2><?php echo nl2br(htmlspecialchars($article['libSsTitr1Art'])); ?></h2>
+                        <h2><?php echo nl2br(make_links_clickable($article['libSsTitr1Art'])); ?></h2>
                         <?php endif; ?>
                         
                         <?php if (!empty($article['parag2Art'])): ?>
-                        <p><?php echo nl2br(htmlspecialchars($article['parag2Art'])); ?></p>
+                        <p><?php echo nl2br(make_links_clickable($article['parag2Art'])); ?></p>
                         <?php endif; ?>
                         
                         <?php if (!empty($article['libSsTitr2Art'])): ?>
-                        <h2><?php echo nl2br(htmlspecialchars($article['libSsTitr2Art'])); ?></h2>
+                        <h2><?php echo nl2br(make_links_clickable($article['libSsTitr2Art'])); ?></h2>
                         <?php endif; ?>
                         
                         <?php if (!empty($article['parag3Art'])): ?>
-                        <p><?php echo nl2br(htmlspecialchars($article['parag3Art'])); ?></p>
+                        <p><?php echo nl2br(make_links_clickable($article['parag3Art'])); ?></p>
                         <?php endif; ?>
                         
                         <?php if (!empty($article['libConclArt'])): ?>
-                        <p><strong><?php echo nl2br(htmlspecialchars($article['libConclArt'])); ?></strong></p>
+                        <p><strong><?php echo nl2br(make_links_clickable($article['libConclArt'])); ?></strong></p>
                         <?php endif; ?>
                     </div>
                     
@@ -271,7 +271,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // LIKES
     const likeBtn = document.getElementById('likeBtn');
     if (likeBtn) {
-        likeBtn.addEventListener('click', function() {
+        likeBtn.addEventListener('click', function(e) {
+            e.preventDefault(); // ✅ EMPÊCHER LE RECHARGEMENT
+            
             const articleId = this.dataset.articleId;
             const userId = this.dataset.userId;
             const isLiked = this.dataset.liked === '1';
