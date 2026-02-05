@@ -139,4 +139,62 @@ function make_links_clickable($text) {
     
     return $text;
 }
+
+/**
+ * Convertir BBCode en HTML
+ * @param string $text Le texte avec BBCode
+ * @return string Le texte converti en HTML
+ */
+function bbcode_to_html($text) {
+    // Échapper le HTML d'abord pour la sécurité
+    $text = htmlspecialchars($text);
+    
+    // Tableaux de patterns BBCode → HTML
+    $patterns = [
+        // Texte de base
+        '/\[b\](.*?)\[\/b\]/is'                    => '<strong>$1</strong>',
+        '/\[i\](.*?)\[\/i\]/is'                    => '<em>$1</em>',
+        '/\[u\](.*?)\[\/u\]/is'                    => '<u>$1</u>',
+        '/\[s\](.*?)\[\/s\]/is'                    => '<del>$1</del>',
+        
+        // Liens
+        '/\[url=(.*?)\](.*?)\[\/url\]/is'          => '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #2F509E; text-decoration: underline;">$2</a>',
+        '/\[url\](.*?)\[\/url\]/is'                => '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #2F509E; text-decoration: underline;">$1</a>',
+        
+        // Images
+        '/\[img\](.*?)\[\/img\]/is'                => '<img src="$1" alt="Image" class="img-fluid rounded my-3" style="max-width: 100%;">',
+        '/\[img=(.*?)\](.*?)\[\/img\]/is'          => '<img src="$2" alt="$1" class="img-fluid rounded my-3" style="max-width: 100%;">',
+        
+        // Couleurs
+        '/\[color=(.*?)\](.*?)\[\/color\]/is'      => '<span style="color:$1">$2</span>',
+        
+        // Taille
+        '/\[size=(.*?)\](.*?)\[\/size\]/is'        => '<span style="font-size:$1px">$2</span>',
+        
+        // Citations
+        '/\[quote\](.*?)\[\/quote\]/is'            => '<blockquote class="border-start border-3 ps-3 my-3" style="border-color: #2F509E !important;"><em>$1</em></blockquote>',
+        '/\[quote=(.*?)\](.*?)\[\/quote\]/is'      => '<blockquote class="border-start border-3 ps-3 my-3" style="border-color: #2F509E !important;"><strong>$1 a dit :</strong><br><em>$2</em></blockquote>',
+        
+        // Code
+        '/\[code\](.*?)\[\/code\]/is'              => '<pre class="bg-light p-3 rounded"><code>$1</code></pre>',
+        
+        // Listes
+        '/\[list\](.*?)\[\/list\]/is'              => '<ul>$1</ul>',
+        '/\[\*\](.*?)\n/i'                         => '<li>$1</li>',
+        
+        // Centrer
+        '/\[center\](.*?)\[\/center\]/is'          => '<div class="text-center">$1</div>',
+    ];
+    
+    // Appliquer toutes les conversions
+    foreach ($patterns as $pattern => $replacement) {
+        $text = preg_replace($pattern, $replacement, $text);
+    }
+    
+    // Gérer aussi les URLs normales (pour compatibilité)
+    $urlPattern = '#\b((https?|ftp)://[^\s<>]+)#i';
+    $text = preg_replace($urlPattern, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #2F509E; text-decoration: underline;">$1</a>', $text);
+    
+    return $text;
+}
 ?>
