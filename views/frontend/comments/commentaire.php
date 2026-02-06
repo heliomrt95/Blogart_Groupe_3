@@ -29,6 +29,7 @@ if(!$DB){
 $stmt = $DB->prepare(
     "SELECT c.*, m.pseudoMemb
      FROM COMMENT c
+     LEFT JOIN MEMBRE m ON c.numMemb = m.numMemb
      WHERE c.numArt = $numArt
        AND c.attModOK = 1
        AND c.delLogiq = 0
@@ -45,12 +46,6 @@ $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <hr>
     
     <!-- Formulaire de commentaire -->
-    <div class="card mb-4">
-        <div class="card-header bg-success text-white">
-            <h3>Ajouter un commentaire</h3>
-            <small>Connecté en tant que : <strong><?php echo $_SESSION['user_pseudo']; ?></strong></small>
-        </div>
-        <div class="card-body">
             <?php
             // Messages
             if(isset($_SESSION['comment_success'])) {
