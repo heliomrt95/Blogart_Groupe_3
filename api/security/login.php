@@ -2,6 +2,39 @@
 session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 
+// === VÉRIFICATION reCAPTCHA v3 ===
+if(!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response'])) {
+    $_SESSION['login_error'] = "Veuillez valider le reCAPTCHA.";
+    header('Location: /views/backend/security/login.php');
+    exit;
+}
+
+$token = $_POST['g-recaptcha-response'];
+$url = 'https://www.google.com/recaptcha/api/siteverify';
+
+$data = array(
+    'secret' => '6LcW8l0sAAAAALUKpIDotR7ZxfWqIjw58OFvJ4OE',
+    'response' => $token
+);
+
+$options = array(
+    'http' => array (
+        'header' => "Content-Type: application/x-www-form-urlencoded\r\n",
+        'method' => 'POST',
+        'content' => http_build_query($data)
+    )
+);
+
+$context = stream_context_create($options);
+$result = file_get_contents($url, false, $context);
+$response = json_decode($result);
+
+if (!$response->success || $response->score < 0.5) {
+    $_SESSION['login_error'] = "Échec de validation reCAPTCHA. Veuillez réessayer.";
+    header('Location: /views/backend/security/login.php');
+    exit;
+}
+
 // Récupération des données
 $pseudo = isset($_POST['pseudo']) ? trim($_POST['pseudo']) : '';
 $password = isset($_POST['password']) ? trim($_POST['password']) : '';

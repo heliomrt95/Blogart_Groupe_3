@@ -59,6 +59,16 @@ unset($_SESSION['signup_success']);
                             </div>
                         </div>
                         
+                        <!-- Badge reCAPTCHA v3 (invisible) -->
+                        <div class="mt-4 mb-4 text-center">
+                            <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
+                            <small class="text-muted">
+                                Ce site est protégé par reCAPTCHA et la 
+                                <a href="https://policies.google.com/privacy" target="_blank">Politique de confidentialité</a> et les
+                                <a href="https://policies.google.com/terms" target="_blank">Conditions d'utilisation</a> de Google s'appliquent.
+                            </small>
+                        </div>
+
                         <button type="submit" class="btn btn-connexion w-100 mt-4">
                             Se connecter
                         </button>
@@ -93,6 +103,17 @@ function togglePassword(inputId, button) {
         icon.classList.add('bi-eye');
     }
 }
+</script>
+
+<!-- reCAPTCHA v3 Script -->
+<script src="https://www.google.com/recaptcha/api.js?render=6LcW8l0sAAAAANgcNyfe-zFagqLEFB1a0fG9FIC8"></script>
+<script>
+    // reCAPTCHA v3
+    grecaptcha.ready(function() {
+        grecaptcha.execute('6LcW8l0sAAAAANgcNyfe-zFagqLEFB1a0fG9FIC8', {action: 'login'}).then(function(token) {
+            document.getElementById('g-recaptcha-response').value = token;
+        });
+    });
 </script>
 
 <?php require_once '../../../footer.php'; ?>
