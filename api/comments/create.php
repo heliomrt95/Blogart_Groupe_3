@@ -1,94 +1,156 @@
 <?php
-// Démarrage de la session pour accéder aux données utilisateur
+// ===============================
+// 1) DÉMARRAGE DE LA SESSION
+// ===============================
+
+// La session permet d’accéder aux informations de l’utilisateur connecté
+// (exemple : $_SESSION['user_id'])
 session_start();
 
-// Inclusion du fichier de configuration (connexion BDD, constantes, etc.)
+
+// ===============================
+// 2) INCLUSION DE LA CONFIGURATION
+// ===============================
+
+// Inclusion du fichier config.php qui contient :
+// - les constantes de connexion à la base de données
+// - la connexion PDO ($DB)
+// - les fonctions SQL (sql_insert, sql_connect, etc.)
 require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 
-// DÉTECTION DU TYPE DE REQUÊTE (AJAX ou classique)
-// Permet d'adapter le format de réponse selon le type de requête
+
+// ===============================
+// 3) DÉTECTION DU MODE AJAX
+// ===============================
+
+// Si ajax=1 est présent dans le POST, cela signifie que la requête
+// a été envoyée en AJAX (fetch / JavaScript)
 $isAjax = isset($_POST['ajax']) && $_POST['ajax'] == '1';
 
-// VÉRIFICATION DE L'AUTHENTIFICATION
-// L'utilisateur doit être connecté pour pouvoir commenter
-if(!isset($_SESSION['user_id'])) {
+
+// ===============================
+// 4) VÉRIFICATION : UTILISATEUR CONNECTÉ
+// ===============================
+
+// Un utilisateur doit être connecté pour poster un commentaire
+if (!isset($_SESSION['user_id'])) {
+
+    // Si la requête est en AJAX, on renvoie une réponse JSON
     if ($isAjax) {
-        // Réponse JSON pour les requêtes AJAX
-        echo json_encode(['success' => false, 'message' => 'Vous devez être connecté.']);
-        exit;
+        echo json_encode([
+            'success' => false,
+            'message' => 'Vous devez être connecté.'
+        ]);
     }
-    // Stockage du message d'erreur en session et redirection vers la page de connexion
+
+    // Sinon, on stocke un message d’erreur en session
+    // puis on redirige vers la page de connexion
     $_SESSION['comment_error'] = "Vous devez être connecté.";
     header('Location: /views/backend/security/login.php');
-    exit;
 }
 
 
-// RÉCUPÉRATION ET NETTOYAGE DES DONNÉES DU FORMULAIRE
-// Cast en entier pour sécuriser les identifiants numériques
-$numArt = (int)$_POST['numArt'];      // ID de l'article
-$numMemb = (int)$_POST['numMemb'];    // ID du membre
-$libCom = trim($_POST['libCom']);      // Contenu du commentaire (espaces supprimés)
+// ===============================
+// 5) RÉCUPÉRATION DES DONNÉES DU FORMULAIRE
+// ===============================
 
-// URL de redirection après traitement (par défaut : liste des articles)
-$redirect = isset($_POST['redirect']) ? $_POST['redirect'] : '/views/frontend/articles.php';
+// Récupération et sécurisation des identifiants numériques
+// Le cast (int) empêche l’envoi de valeurs non numériques
+$numArt  = (int) $_POST['numArt'];     // Identifiant de l’article
+$numMemb = (int) $_POST['numMemb'];    // Identifiant du membre
+
+// trim() enlève les espaces inutiles au début et à la fin du texte
+$libCom = trim($_POST['libCom']);      // Texte du commentaire
+
+// URL de redirection après traitement
+// Si aucune URL n’est fournie, on revient à la liste des articles
+$redirect = isset($_POST['redirect'])
+    ? $_POST['redirect']
+    : '/views/frontend/articles.php';
 
 
-// VALIDATION : VÉRIFICATION DE L'IDENTITÉ DE L'UTILISATEUR
-// Sécurité : l'ID membre envoyé doit correspondre à l'utilisateur connecté
-// Empêche un utilisateur de poster un commentaire au nom d'un autre
-if($numMemb != $_SESSION['user_id']) {
+// ===============================
+// 6) SÉCURITÉ : VÉRIFICATION DE L’IDENTITÉ
+// ===============================
+
+// Vérification essentielle :
+// l’ID du membre envoyé doit correspondre à l’utilisateur connecté
+// Cela empêche l’usurpation d’identité
+if ($numMemb != $_SESSION['user_id']) {
+
     if ($isAjax) {
-        echo json_encode(['success' => false, 'message' => 'Erreur utilisateur.']);
-        exit;
+        echo json_encode([
+            'success' => false,
+            'message' => 'Erreur utilisateur.'
+        ]);
     }
+
     $_SESSION['comment_error'] = "Erreur utilisateur.";
     header('Location: ' . $redirect);
-    exit;
 }
 
 
-// VALIDATION : VÉRIFICATION DU CONTENU DU COMMENTAIRE
-// Le commentaire ne doit pas être vide et ne doit pas dépasser 600 caractères
-if(empty($libCom) || strlen($libCom) > 600) {
+// ===============================
+// 7) VALIDATION DU CONTENU DU COMMENTAIRE
+// ===============================
+
+// Le commentaire doit :
+// - contenir au moins 1 caractère
+// - ne pas dépasser 600 caractères
+if (empty($libCom) || strlen($libCom) > 600) {
+
     if ($isAjax) {
-        echo json_encode(['success' => false, 'message' => 'Le commentaire doit contenir entre 1 et 600 caractères.']);
-        exit;
+        echo json_encode([
+            'success' => false,
+            'message' => 'Le commentaire doit contenir entre 1 et 600 caractères.'
+        ]);
     }
+
     $_SESSION['comment_error'] = "Commentaire entre 1 et 600 caractères.";
     header('Location: ' . $redirect);
-    exit;
 }
 
-// SÉCURISATION DES DONNÉES AVANT INSERTION
-// Protection contre les injections SQL et les attaques XSS :
-// - htmlspecialchars() : convertit les caractères spéciaux HTML en entités
-// - addslashes() : échappe les caractères spéciaux pour SQL
+
+// ===============================
+// 8) SÉCURISATION DU TEXTE AVANT INSERTION
+// ===============================
+
+// htmlspecialchars() : empêche l’injection de HTML/JavaScript (XSS)
+// addslashes() : échappe certains caractères spéciaux pour la requête SQL
+// (idéalement, on utiliserait une requête préparée)
 $libCom = addslashes(htmlspecialchars($libCom, ENT_QUOTES, 'UTF-8'));
 
-// INSERTION DU COMMENTAIRE EN BASE DE DONNÉES
+
+// ===============================
+// 9) INSERTION DU COMMENTAIRE EN BASE
+// ===============================
+
 // Colonnes de la table COMMENT à remplir
 $columns = 'libCom, numArt, numMemb, attModOK, delLogiq';
 
-// Valeurs à insérer :
-// - attModOK = 0 : commentaire en attente de modération (non validé)
-// - delLogiq = 0 : commentaire non supprimé (suppression logique inactive)
+// Valeurs insérées :
+// - attModOK = 0 → commentaire en attente de modération
+// - delLogiq = 0 → commentaire non supprimé (suppression logique inactive)
 $values = "'$libCom', $numArt, $numMemb, 0, 0";
 
-// Appel de la fonction d'insertion SQL
+// Insertion du commentaire en base de données
 sql_insert('COMMENT', $columns, $values);
 
-// RÉPONSE SELON LE TYPE DE REQUÊTE
+
+// ===============================
+// 10) RÉPONSE SELON LE TYPE DE REQUÊTE
+// ===============================
+
+// Si la requête est en AJAX, on renvoie une réponse JSON
 if ($isAjax) {
-    // Réponse JSON pour les requêtes AJAX (succès)
     echo json_encode([
-        'success' => true, 
+        'success' => true,
         'message' => 'Votre commentaire a été soumis et est en attente de modération.'
     ]);
-    exit;
 }
 
-// Stockage du message de succès en session et redirection
+// Sinon, on stocke un message de succès en session
+// puis on redirige vers la page précédente
 $_SESSION['comment_success'] = "Votre commentaire a été soumis et est en attente de modération.";
 header('Location: ' . $redirect);
 ?>
