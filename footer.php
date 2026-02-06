@@ -53,6 +53,11 @@
                             Gestion des cookies
                         </a>
                     </li>
+                                        <li class="mb-2">
+                        <a href="/views/frontend/rgpd/cgu.php" class="text-white text-decoration-none" style="opacity: 0.85;">
+                            CGU
+                        </a>
+                    </li>
                 </ul>
             </div>
             

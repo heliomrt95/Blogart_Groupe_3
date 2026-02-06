@@ -1,7 +1,8 @@
 # Blogart Template
 
 ## Setup
-
+login: admin1234
+password: admin1234@gmail
 
 ## Architecture
 - **api** - Contains all php calls for example "create.php" for statuts, articles

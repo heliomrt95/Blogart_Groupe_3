@@ -6,10 +6,8 @@ $isAjax = isset($_POST['ajax']) && $_POST['ajax'] == '1';
 
 // Vérifier connexion
 if(!isset($_SESSION['user_id'])) {
-    if ($isAjax) {
-        echo json_encode(['success' => false, 'error' => 'Non connecté']);
-        exit;
-    }
+    echo json_encode(['success' => false, 'error' => 'Non connecté']);
+    exit;
     header('Location: /views/backend/security/login.php');
     exit;
 }
@@ -20,10 +18,8 @@ $redirect = isset($_POST['redirect']) ? $_POST['redirect'] : '/views/frontend/ar
 
 // Vérifier que c'est bien l'utilisateur connecté
 if($numMemb != $_SESSION['user_id']) {
-    if ($isAjax) {
-        echo json_encode(['success' => false, 'error' => 'Erreur utilisateur']);
-        exit;
-    }
+    echo json_encode(['success' => false, 'error' => 'Erreur utilisateur']);
+    exit;
     header('Location: ' . $redirect);
     exit;
 }
