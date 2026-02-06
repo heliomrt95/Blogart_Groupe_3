@@ -1,44 +1,44 @@
 <?php
-// Inclusion du fichier header qui contient le layout général et l'accès à la configuration
+// Inclusion du header commun : initialise l'environnement, sessions, et charge le layout
 include '../../../header.php';
 
-// Vérification que l'ID du mot-clé est présent en paramètre GET
+// Vérifie si l'identifiant du mot-clé est présent dans la query string
 if(isset($_GET['numMotCle'])){
-    // Récupération de l'ID du mot-clé à partir de l'URL
+    // Récupération de l'ID depuis l'URL (doit être validé côté API lors de la soumission)
     $numMotCle = $_GET['numMotCle'];
-    // Requête pour récupérer le mot-clé correspondant à cet ID
+    // Requête utilitaire pour obtenir l'enregistrement complet du mot-clé
     $motcle = sql_select("MOTCLE", "*", "numMotCle = $numMotCle")[0];
-    // Extraction du libellé du mot-clé pour le pré-remplir dans le formulaire
+    // Pré-remplit le libellé pour l'afficher dans le formulaire d'édition
     $libMotCle = $motcle['libMotCle'];
 }
 ?>
 
-<!-- Structure Bootstrap pour afficher le formulaire de modification -->
+<!-- Conteneur Bootstrap principal pour le formulaire d'édition -->
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <!-- Titre de la page -->
+            <!-- Titre de la page d'édition -->
             <h1>Modification Mot-clé</h1>
         </div>
         <div class="col-md-12">
-            <!-- Formulaire d'édition d'un mot-clé qui envoie les données à l'API -->
+            <!-- Formulaire POST vers l'API de mise à jour des mots-clés -->
             <form action="<?php echo ROOT_URL . '/api/keywords/update.php' ?>" method="post">
-                <!-- Champ caché pour transmettre l'ID du mot-clé à l'API -->
+                <!-- Champ caché contenant l'ID du mot-clé : nécessaire pour l'update côté serveur -->
                 <input id="numMotCle" name="numMotCle" type="hidden" value="<?php echo($numMotCle); ?>" />
                 
-                <!-- Groupe de formulaire pour le libellé du mot-clé -->
+                <!-- Champ pour modifier le libellé du mot-clé -->
                 <div class="form-group">
                     <label for="libMotCle">Libellé du mot-clé</label>
-                    <!-- Champ texte pré-rempli avec la valeur actuelle du mot-clé -->
+                    <!-- Input texte pré-rempli avec la valeur actuelle ; `required` empêche l'envoi vide -->
                     <input id="libMotCle" name="libMotCle" class="form-control" type="text" value="<?php echo($libMotCle); ?>" autofocus="autofocus" required />
                 </div>
                 <br />
-                <!-- Groupe de boutons : retour à la liste et confirmation de la modification -->
+                <!-- Actions : retour à la liste ou confirmation de la modification -->
                 <div class="form-group mt-2">
-                    <!-- Lien pour retourner à la liste des mots-clés -->
-                    <a href="list.php" class="btn btn-primary">List</a>
-                    <!-- Bouton pour soumettre le formulaire et mettre à jour le mot-clé -->
-                    <button type="submit" class="btn btn-warning">Confirmer modification ?</button>
+                    <!-- Lien pour revenir à la liste sans sauvegarder -->
+                    <a href="list.php" class="btn btn-primary">Liste</a>
+                    <!-- Bouton pour soumettre le formulaire et appeler l'API d'update -->
+                    <button type="submit" class="btn btn-warning">Confirmer</button>
                 </div>
             </form>
         </div>
@@ -46,6 +46,6 @@ if(isset($_GET['numMotCle'])){
 </div>
 
 <?php
-// Inclusion du fichier footer qui contient la fermeture du layout général
+// Inclusion du footer commun : fermetures HTML, scripts partagés
 include '../../../footer.php';
 ?>
