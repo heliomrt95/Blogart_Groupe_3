@@ -8,16 +8,8 @@ if(!isset($_SESSION['user_statut_nom']) || $_SESSION['user_statut_nom'] !== 'Mod
 }
 
 // Charger tous les articles avec leur thématique
-$query = "SELECT a.*, t.libThem 
-          FROM ARTICLE a 
-          LEFT JOIN THEMATIQUE t ON a.numThem = t.numThem 
-          ORDER BY a.dtCreaArt DESC";
-
-global $DB;
-if(!$DB){
-    sql_connect();
-}
-$articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
+$articles = sql_select("ARTICLE a LEFT JOIN THEMATIQUE t ON a.numThem = t.numThem",
+ "a.*, t.libThem", null, null, "a.dtCreaArt DESC");
 ?>
 
 <div class="container py-5">
@@ -126,7 +118,7 @@ $articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
                                             </a>
                                             
                                             <!-- Supprimer -->
-                                            <a href="/api/articles/delete.php?id=<?php echo $article['numArt']; ?>" 
+                                            <a href="delete.php?numArt=<?php echo $article['numArt']; ?>" 
                                                class="btn btn-sm btn-outline-danger"
                                                onclick="return confirm('Voulez-vous vraiment supprimer cet article ?\n\nTous les éléments associés seront également supprimés :\n✗ Commentaires\n✗ Likes\n✗ Mots-clés\n✗ Image\n\nCette action est irréversible.');"
                                                title="Supprimer">

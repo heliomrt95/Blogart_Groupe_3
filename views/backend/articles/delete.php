@@ -6,16 +6,12 @@ if(isset($_GET['numArt'])){
     $numArt = $_GET['numArt'];
     
     // Récupération article avec thématique
-    $query = "SELECT a.*, t.libThem 
-              FROM ARTICLE a 
-              LEFT JOIN THEMATIQUE t ON a.numThem = t.numThem 
-              WHERE a.numArt = $numArt";
-    global $DB;
-    if(!$DB){
-        sql_connect();
-    }
-    $article = $DB->query($query)->fetch(PDO::FETCH_ASSOC);
+    $article = sql_select("ARTICLE a 
+              LEFT JOIN THEMATIQUE t ON a.numThem = t.numThem",
+               "a.*, t.libThem", "a.numArt = $numArt");
+    $article = $article[0];
 }
+
 ?>
 
 <!-- Bootstrap form to delete an article -->
