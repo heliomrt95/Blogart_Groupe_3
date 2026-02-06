@@ -1,16 +1,12 @@
 <?php 
 require_once '../../header.php';
-sql_connect();
+
 
 // Charger TOUS les articles
-$query = "SELECT a.*, t.libThem 
-          FROM ARTICLE a 
-          LEFT JOIN THEMATIQUE t ON a.numThem = t.numThem 
-          ORDER BY a.numArt DESC";
-
-global $DB;
-$articles = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
+$articles = sql_select("ARTICLE a LEFT JOIN THEMATIQUE t ON a.numThem = t.numThem",
+ "a.*, t.libThem", null, null, "a.numArt DESC");
 ?>
+
 
 <!-- PAGE ARTICLES -->
 <section class="page-articles">
