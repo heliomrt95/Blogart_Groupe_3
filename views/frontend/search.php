@@ -193,7 +193,7 @@ if (!empty($searchQuery)) {
                         </div>
                     </div>
                 </div>
-            <?php endif; ?>
+            <?php } ?>
             
         </div>
     </div>

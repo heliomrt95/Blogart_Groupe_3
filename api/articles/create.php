@@ -55,15 +55,14 @@ if(isset($_FILES['urlPhotArt']) && $_FILES['urlPhotArt']['error'] == 0) {
     }
 }
 
-// ✅ INSERTION DE L'ARTICLE AVEC PDO
+//  INSERTION DE L'ARTICLE AVEC PDO
 try {
-    sql_insert('ARTICLE', 
-        'libTitrArt, libChapoArt, libAccrochArt, parag1Art, libSsTitr1Art, parag2Art, libSsTitr2Art, parag3Art, libConclArt, urlPhotArt, numThem',
-        "???"
-    );
+    // Préparer une requête INSERT avec des paramètres nommés
+    $query = "INSERT INTO ARTICLE (libTitrArt, libChapoArt, libAccrochArt, parag1Art, libSsTitr1Art, parag2Art, libSsTitr2Art, parag3Art, libConclArt, urlPhotArt, numThem) ";
+    $query .= "VALUES (:libTitrArt, :libChapoArt, :libAccrochArt, :parag1Art, :libSsTitr1Art, :parag2Art, :libSsTitr2Art, :parag3Art, :libConclArt, :urlPhotArt, :numThem)";
 
     $stmt = $DB->prepare($query);
-    
+
     // Exécuter l'insertion
     $stmt->execute([
         'libTitrArt' => $libTitrArt,
@@ -79,10 +78,10 @@ try {
         'numThem' => $numThem
     ]);
     
-    // ✅ RÉCUPÉRER L'ID DE L'ARTICLE
+    // RÉCUPÉRER L'ID DE L'ARTICLE
     $lastArticleId = $DB->lastInsertId();
     
-    // ✅ TRAITEMENT DES MOTS-CLÉS
+    // TRAITEMENT DES MOTS-CLÉS
     if (isset($_POST['motscles']) && is_array($_POST['motscles']) && count($_POST['motscles']) > 0) {
         
         foreach ($_POST['motscles'] as $keywordId) {
