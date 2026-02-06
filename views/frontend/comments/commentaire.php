@@ -2,13 +2,6 @@
 session_start();
 require_once '../../../header.php';
 
-// Vérifier si l'utilisateur est connecté
-if(!isset($_SESSION['user_id'])) {
-    echo "<div class='alert alert-warning'>Vous devez être connecté pour commenter.</div>";
-    echo "<a href='../security/login.php' class='btn btn-primary'>Se connecter</a>";
-    exit;
-}
-
 // Récupérer l'article depuis l'URL
 $numArt = 0;
 if (isset($_GET['numArt'])) {
@@ -20,7 +13,6 @@ if($numArt == 0) {
     exit;
 }
 
-// Récupérer les informations de l'article
 $article = sql_select("ARTICLE", "*", "numArt = $numArt");
 if(count($article) == 0) {
     echo "<div class='alert alert-danger'>Article introuvable.</div>";
@@ -28,20 +20,22 @@ if(count($article) == 0) {
 }
 $article = $article[0];
 
-// Récupérer les commentaires validés de cet article
-$query = "SELECT c.*, m.pseudoMemb 
-          FROM COMMENT c 
-          LEFT JOIN MEMBRE m ON c.numMemb = m.numMemb 
-          WHERE c.numArt = $numArt 
-          AND c.attModOK = 1 
-          AND c.delLogiq = 0
-          ORDER BY c.dtCreaCom DESC";
-          
+// Récupérer les commentaires validés de cet article (requête préparée)
 global $DB;
 if(!$DB){
     sql_connect();
 }
-$comments = $DB->query($query)->fetchAll(PDO::FETCH_ASSOC);
+
+$stmt = $DB->prepare(
+    "SELECT c.*, m.pseudoMemb
+     FROM COMMENT c
+     WHERE c.numArt = $numArt
+       AND c.attModOK = 1
+       AND c.delLogiq = 0
+     ORDER BY c.dtCreaCom DESC"
+);
+$stmt->execute(['numArt' => $numArt]);
+$comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container my-5">
