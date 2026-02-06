@@ -1,11 +1,15 @@
 <?php
 include '../../../header.php';
 
+if (!isset($_GET['numArt'])) {
+    // Redirection vers la liste si numArt n'est pas fourni
+    header('Location: list.php');
+    exit;
+}
+
 // Récupération de l'article à modifier
-if(isset($_GET['numArt'])){
     $numArt = $_GET['numArt'];
     $article = sql_select("ARTICLE", "*", "numArt = $numArt")[0];
-}
 
 // Charger toutes les thématiques pour la listbox
 $thematiques = sql_select("THEMATIQUE", "*");
@@ -19,7 +23,7 @@ $thematiques = sql_select("THEMATIQUE", "*");
         </div>
         <div class="col-md-12">
             <!-- Form to edit an article -->
-            <form action="<?php echo ROOT_URL . '/api/articles/update.php' ?>" method="post" enctype="multipart/form-data">
+            <form action="<?php echo ROOT_URL . 'update.php' ?>" method="post" enctype="multipart/form-data">
                 <!-- Hidden input for numArt -->
                 <input id="numArt" name="numArt" type="hidden" value="<?php echo($article['numArt']); ?>" />
                 

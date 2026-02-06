@@ -4,9 +4,9 @@ include '../../../header.php';
 // Charger toutes les thématiques pour la listbox
 $thematiques = sql_select("THEMATIQUE", "*");
 
-// Charger tous les mots-clés existants (avec requête directe)
-global $DB;
-$motscles = $DB->query("SELECT * FROM MOTCLE ORDER BY libMotCle ASC")->fetchAll(PDO::FETCH_ASSOC);
+$motscles = sql_select("MOTCLE", "*",
+ null, null, "libMotCle ASC");
+
 ?>
 
 <!-- Bootstrap form to create a new article -->

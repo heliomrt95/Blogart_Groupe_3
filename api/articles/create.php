@@ -19,7 +19,7 @@ $libSsTitr2Art = addslashes($_POST['libSsTitr2Art']);
 $parag3Art = addslashes($_POST['parag3Art']);
 $libConclArt = addslashes($_POST['libConclArt']);
 // Récupération de la thématique associée
-$numThem = (int)$_POST['numThem'];
+$numThem = intval($_POST['numThem']);
 
 // Gestion de l'upload d'image
 $urlPhotArt = '';
@@ -58,12 +58,12 @@ if(isset($_FILES['urlPhotArt']) && $_FILES['urlPhotArt']['error'] == 0) {
 //  INSERTION DE L'ARTICLE AVEC PDO
 try {
     // Préparer une requête INSERT avec des paramètres nommés
-    sql_insert('ARTICLE', 'libTitrArt, libChapoArt, libAccrochArt, parag1Art, libSsTitr1Art, 
-               parag2Art, libSsTitr2Art, parag3Art, libConclArt, urlPhotArt, numThem',
-               '"$libTitrArt", "$libChapoArt", "$libAccrochArt", "$parag1Art", "$libSsTitr1Art", 
-                "$parag2Art", "$libSsTitr2Art", "$parag3Art", "$libConclArt", "$urlPhotArt", $numThem');
-        
-    $id_last_article = sql_select('ARTICLE', 'MAX(numArt) AS max_id', ' libTitrAr = "$libTitrArt"');
+    sql_insert('ARTICLE', 'numThem, libTitrArt, libChapoArt, libAccrochArt, parag1Art, libSsTitr1Art, 
+               parag2Art, libSsTitr2Art, parag3Art, libConclArt, urlPhotArt',
+               $numThem.', "'.$libTitrArt.'", "'.$libChapoArt.'", "'.$libAccrochArt.'", "'.$parag1Art.'", "'.$libSsTitr1Art.'", 
+                "'.$parag2Art.'", "'.$libSsTitr2Art.'", "'.$parag3Art.'", "'.$libConclArt.'", "'.$urlPhotArt.'"');
+    $lastArticleId = sql_select('ARTICLE', 'MAX(numArt) AS max_id', ' libTitrArt = "'.$libTitrArt.'"');
+    $lastArticleId = $lastArticleId[0]['max_id'];
     
     // TRAITEMENT DES MOTS-CLÉS
     if (isset($_POST['motscles']) && is_array($_POST['motscles']) && count($_POST['motscles']) > 0) {

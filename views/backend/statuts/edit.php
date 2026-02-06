@@ -1,12 +1,16 @@
 <?php
 include '../../../header.php';
 
+if (!isset($_GET['numStat'])) {
+    // Redirection vers la liste si numStat n'est pas fourni
+    header('Location: list.php');
+    exit;
+}
+
 // Récupération du statut à modifier
-if(isset($_GET['numStat'])){
     $numStat = $_GET['numStat'];
     $statut = sql_select("STATUT", "*", "numStat = $numStat")[0];
     $libStat = $statut['libStat'];
-}
 ?>
 
 <!-- Bootstrap form to edit a statut -->
