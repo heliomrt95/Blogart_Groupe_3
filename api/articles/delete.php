@@ -6,11 +6,18 @@ sql_connect();
 global $DB;
 
 // Récupérer l'ID de l'article
-$numArt = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+// Il peut être passer en GET ou en POST si on a un formulaire caché
+if (isset($_GET['id'])) {
+    $numArt = (int)$_GET['id'];
+} elseif (isset($_POST['numArt'])) {
+    $numArt = (int)$_POST['numArt'];
+} else {
+    $numArt = 0;
+}
 
 if ($numArt <= 0) {
-    header('Location: ../../views/backend/articles/list.php?error=ID invalide');
-    exit;
+    // Si c'est invalide, on affiche l'erreur pour comprendre
+    die("Erreur : ID invalide : " . var_export($_REQUEST, true));
 }
 
 try {
