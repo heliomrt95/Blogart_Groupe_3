@@ -57,6 +57,7 @@ if(isset($_FILES['urlPhotArt']) && $_FILES['urlPhotArt']['error'] == 0) {
 
 //  INSERTION DE L'ARTICLE AVEC PDO
 try {
+<<<<<<< Updated upstream
     // Préparer une requête INSERT avec des paramètres nommés
     sql_insert('ARTICLE', 'numThem, libTitrArt, libChapoArt, libAccrochArt, parag1Art, libSsTitr1Art, 
                parag2Art, libSsTitr2Art, parag3Art, libConclArt, urlPhotArt',
@@ -64,6 +65,15 @@ try {
                 "'.$parag2Art.'", "'.$libSsTitr2Art.'", "'.$parag3Art.'", "'.$libConclArt.'", "'.$urlPhotArt.'"');
     $lastArticleId = sql_select('ARTICLE', 'MAX(numArt) AS max_id', ' libTitrArt = "'.$libTitrArt.'"');
     $lastArticleId = $lastArticleId[0]['max_id'];
+=======
+    sql_insert('ARTICLE', 
+        'libTitrArt, libChapoArt, libAccrochArt, parag1Art, libSsTitr1Art,
+         parag2Art, libSsTitr2Art, parag3Art, libConclArt, urlPhotArt, numThem',
+        "???"
+    );
+
+    $stmt = $DB->prepare($query);
+>>>>>>> Stashed changes
     
     // TRAITEMENT DES MOTS-CLÉS
     if (isset($_POST['motscles']) && is_array($_POST['motscles']) && count($_POST['motscles']) > 0) {
