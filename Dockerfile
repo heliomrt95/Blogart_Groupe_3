@@ -6,9 +6,10 @@ RUN a2dismod mpm_event || true && a2enmod mpm_prefork rewrite
 RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
 RUN sed -i 's/Listen 80$/Listen 8080/' /etc/apache2/ports.conf && \
     sed -i 's/\*:80>/\*:8080>/' /etc/apache2/sites-enabled/000-default.conf
+RUN echo 'PassEnv DB_HOST DB_USER DB_PASSWORD DB_DATABASE APP_DEBUG' >> /etc/apache2/apache2.conf
 
 COPY . /var/www/html/
-RUN echo "# Railway env vars are injected by the container" > /var/www/html/.env
+RUN echo "# empty" > /var/www/html/.env
 
 EXPOSE 8080
 CMD ["apache2-foreground"]
