@@ -18,6 +18,10 @@ RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
 # Pass Railway environment variables to PHP via Apache
 RUN echo 'PassEnv DB_HOST DB_USER DB_PASSWORD DB_DATABASE APP_DEBUG' >> /etc/apache2/apache2.conf
 
+# Hardcode port 8080 at build time (Railway routes to EXPOSE 8080)
+RUN sed -i 's/Listen 80$/Listen 8080/' /etc/apache2/ports.conf && \
+    sed -i 's/\*:80>/\*:8080>/' /etc/apache2/sites-enabled/000-default.conf
+
 # Copy project files
 COPY . /var/www/html/
 
@@ -27,8 +31,8 @@ RUN echo "# empty" > /var/www/html/.env
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html
 
-# Railway injects extra MPM modules at runtime - fix at container startup, then configure PORT
-RUN printf '#!/bin/bash\nset -e\na2dismod mpm_event mpm_worker 2>/dev/null || true\nrm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.* 2>/dev/null || true\na2enmod mpm_prefork 2>/dev/null || true\nPORT="${PORT:-8080}"\nsed -i "s/Listen 80/Listen $PORT/" /etc/apache2/ports.conf\nsed -i "s/*:80>/*:$PORT>/" /etc/apache2/sites-enabled/000-default.conf\nexec apache2-foreground\n' > /start.sh && chmod +x /start.sh
+# Runtime MPM fix: Railway injects extra MPM modules at container startup
+RUN printf '#!/bin/bash\nset -e\na2dismod mpm_event mpm_worker 2>/dev/null || true\nrm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.* 2>/dev/null || true\na2enmod mpm_prefork 2>/dev/null || true\nexec apache2-foreground\n' > /start.sh && chmod +x /start.sh
 
 EXPOSE 8080
 
