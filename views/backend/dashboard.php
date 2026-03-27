@@ -8,8 +8,8 @@ if(!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     exit;
 }
 
-// Vérifier si l'utilisateur est Modérateur
-if(!isset($_SESSION['user_statut_nom']) || $_SESSION['user_statut_nom'] !== 'Modérateur') {
+// Vérifier si l'utilisateur est Modérateur ou Administrateur
+if(!isset($_SESSION['user_statut_nom']) || !in_array($_SESSION['user_statut_nom'], ['Modérateur', 'Administrateur'])) {
     header('Location: /index.php');
     exit;
 }

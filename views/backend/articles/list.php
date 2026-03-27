@@ -1,8 +1,8 @@
 <?php
 require_once '../../../header.php';
 
-// Vérifier que c'est un modérateur
-if(!isset($_SESSION['user_statut_nom']) || $_SESSION['user_statut_nom'] !== 'Modérateur') {
+// Vérifier que c'est un modérateur ou administrateur
+if(!isset($_SESSION['user_statut_nom']) || !in_array($_SESSION['user_statut_nom'], ['Modérateur', 'Administrateur'])) {
     header('Location: /index.php');
     exit;
 }
