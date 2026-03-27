@@ -21,11 +21,11 @@ $articles = sql_select("ARTICLE a LEFT JOIN THEMATIQUE t ON a.numThem = t.numThe
                             <!-- Image à gauche (Bootstrap col) -->
                             <div class="col-lg-5">
                                 <div class="article-item-image">
-                                    <?php if(!empty($article['urlPhotArt'])) { ?>
-                                        <img src="/src/uploads/<?php echo $article['urlPhotArt']; ?>" 
+                                    <?php if(!empty($article['urlPhotArt']) && file_exists(ROOT . '/src/uploads/' . $article['urlPhotArt'])) { ?>
+                                        <img src="/src/uploads/<?php echo $article['urlPhotArt']; ?>"
                                              class="img-fluid" alt="Article">
                                     <?php } else { ?>
-                                        <img src="https://images.unsplash.com/photo-1590479773265-7464e5d48118?w=600" 
+                                        <img src="/src/images/banner.png"
                                              class="img-fluid" alt="Article">
                                     <?php } ?>
                                 </div>

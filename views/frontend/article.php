@@ -98,11 +98,11 @@ if ($articleId > 0) {
     <div class="container-fluid px-0">
         <!-- Image Hero -->
         <div class="article-hero">
-            <?php if(!empty($article['urlPhotArt'])) { ?>
-                <img src="/src/uploads/<?php echo htmlspecialchars($article['urlPhotArt']); ?>" 
+            <?php if(!empty($article['urlPhotArt']) && file_exists(ROOT . '/src/uploads/' . $article['urlPhotArt'])) { ?>
+                <img src="/src/uploads/<?php echo htmlspecialchars($article['urlPhotArt']); ?>"
                      class="img-fluid w-100" alt="<?php echo htmlspecialchars($article['libTitrArt']); ?>">
             <?php } else { ?>
-                <img src="https://images.unsplash.com/photo-1590479773265-7464e5d48118?w=1600" 
+                <img src="/src/images/banner.png"
                      class="img-fluid w-100" alt="Article">
             <?php } ?>
             
