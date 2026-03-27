@@ -60,8 +60,8 @@ $articles = sql_select("ARTICLE a LEFT JOIN THEMATIQUE t ON a.numThem = t.numThe
                                 <tr>
                                     <!-- Image -->
                                     <td>
-                                        <?php if (!empty($article['urlPhotArt'])) { ?>
-                                            <img src="/src/uploads/<?php echo htmlspecialchars($article['urlPhotArt']); ?>" 
+                                        <?php if (!empty($article['urlPhotArt']) && file_exists(ROOT . '/src/uploads/' . $article['urlPhotArt'])) { ?>
+                                            <img src="/src/uploads/<?php echo htmlspecialchars($article['urlPhotArt']); ?>"
                                                  alt="<?php echo htmlspecialchars($article['libTitrArt']); ?>"
                                                  style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
                                         <?php } else { ?>
