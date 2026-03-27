@@ -31,8 +31,8 @@ RUN echo "# empty" > /var/www/html/.env
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html
 
-# Runtime MPM fix: Railway injects extra MPM modules at container startup
-RUN printf '#!/bin/bash\nset -e\na2dismod mpm_event mpm_worker 2>/dev/null || true\nrm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.* 2>/dev/null || true\na2enmod mpm_prefork 2>/dev/null || true\nexec apache2-foreground\n' > /start.sh && chmod +x /start.sh
+# Runtime: configure port dynamically ($PORT for Render, fallback 8080 for Railway)
+RUN printf '#!/bin/bash\nset -e\nPORT=${PORT:-8080}\nsed -i "s/Listen [0-9]*/Listen $PORT/" /etc/apache2/ports.conf\nsed -i "s/*:[0-9]*>/*:$PORT>/" /etc/apache2/sites-enabled/000-default.conf\na2dismod mpm_event mpm_worker 2>/dev/null || true\nrm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.* 2>/dev/null || true\na2enmod mpm_prefork 2>/dev/null || true\nexec apache2-foreground\n' > /start.sh && chmod +x /start.sh
 
 EXPOSE 8080
 
