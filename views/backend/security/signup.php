@@ -195,7 +195,7 @@ if (isset($_SESSION['signup_error'])) {
 </section>
 
 <!-- reCAPTCHA v3 Script -->
-<script src="https://www.google.com/recaptcha/api.js?render=6LcW8l0sAAAAANgcNyfe-zFagqLEFB1a0fG9FIC8"></script>
+<script src="https://www.google.com/recaptcha/api.js?render=6LcEkJosAAAAAEh8rzfy2CThSdKtd-V3RD7quHJ3"></script>
 
 <!-- Scripts -->
 <script>
@@ -208,7 +208,7 @@ document.getElementById('signupForm').addEventListener('submit', function(e) {
     submitBtn.textContent = 'Inscription en cours...';
     
     grecaptcha.ready(function() {
-        grecaptcha.execute('6LcW8l0sAAAAANgcNyfe-zFagqLEFB1a0fG9FIC8', {action: 'signup'}).then(function(token) {
+        grecaptcha.execute('6LcEkJosAAAAAEh8rzfy2CThSdKtd-V3RD7quHJ3', {action: 'signup'}).then(function(token) {
             document.getElementById('g-recaptcha-response').value = token;
             document.getElementById('signupForm').submit();
         }).catch(function(error) {

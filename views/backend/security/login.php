@@ -106,11 +106,11 @@ function togglePassword(inputId, button) {
 </script>
 
 <!-- reCAPTCHA v3 Script -->
-<script src="https://www.google.com/recaptcha/api.js?render=6LcW8l0sAAAAANgcNyfe-zFagqLEFB1a0fG9FIC8"></script>
+<script src="https://www.google.com/recaptcha/api.js?render=6LcEkJosAAAAAEh8rzfy2CThSdKtd-V3RD7quHJ3"></script>
 <script>
     // reCAPTCHA v3
     grecaptcha.ready(function() {
-        grecaptcha.execute('6LcW8l0sAAAAANgcNyfe-zFagqLEFB1a0fG9FIC8', {action: 'login'}).then(function(token) {
+        grecaptcha.execute('6LcEkJosAAAAAEh8rzfy2CThSdKtd-V3RD7quHJ3', {action: 'login'}).then(function(token) {
             document.getElementById('g-recaptcha-response').value = token;
         });
     });
