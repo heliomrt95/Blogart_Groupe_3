@@ -72,7 +72,7 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
                 
                 <?php if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) { ?>
                     
-                    <?php if(isset($_SESSION['user_statut_nom']) && $_SESSION['user_statut_nom'] === 'Modérateur') { ?>
+                    <?php if(isset($_SESSION['user_statut_nom']) && in_array($_SESSION['user_statut_nom'], ['Modérateur', 'Administrateur'])) { ?>
                         <li class="nav-item">
                             <a class="nav-link" href="/views/backend/dashboard.php">Admin</a>
                         </li>
